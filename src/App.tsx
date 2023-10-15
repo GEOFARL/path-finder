@@ -5,6 +5,7 @@ import {
   responsiveFontSizes,
 } from '@mui/material';
 import Header from './components/Header';
+import ControlMenu from './components/ControlMenu';
 
 let theme = createTheme({});
 theme = responsiveFontSizes(theme);
@@ -14,6 +15,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Container>
         <Header />
+        <ControlMenu />
       </Container>
     </ThemeProvider>
   );
