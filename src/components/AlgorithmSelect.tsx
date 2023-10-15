@@ -20,8 +20,8 @@ const AlgorithmSelect: React.FC = () => {
         label="Searching Algorithm"
         onChange={(e) => setAlgorithm(e.target.value as Algorithm)}
       >
-        {Object.entries(Algorithm).map((value, i) => (
-          <MenuItem value={value[0]} key={i}>
+        {Object.entries(Algorithm).map((value) => (
+          <MenuItem value={value[0]} key={value[0]}>
             {value[1]}
           </MenuItem>
         ))}
