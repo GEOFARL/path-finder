@@ -1,8 +1,23 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, Stack } from '@mui/material';
 import AlgorithmSelect from './AlgorithmSelect';
 import SpeedSelect from './SpeedSelect';
+import SliderHandle from './SliderHandle';
 
-const ControlMenu: React.FC = () => {
+interface ControlMenuProps {
+  rows: number;
+  cols: number;
+  handleChangeRows: (e: Event, newValue: number | number[]) => void;
+  handleChangeCols: (e: Event, newValue: number | number[]) => void;
+  calculateValue: (value: number) => number;
+}
+
+const ControlMenu: React.FC<ControlMenuProps> = ({
+  rows,
+  cols,
+  handleChangeCols,
+  handleChangeRows,
+  calculateValue,
+}) => {
   return (
     <Box
       mt={{
@@ -24,6 +39,32 @@ const ControlMenu: React.FC = () => {
           </Button>
         </Grid>
       </Grid>
+
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 2, sm: 10 }}
+        sx={{
+          justifyContent: 'center',
+          mt: '1rem',
+          px: {
+            xs: '1rem',
+            sm: '0',
+          },
+        }}
+      >
+        <SliderHandle
+          value={rows}
+          handleChange={handleChangeRows}
+          title={`Rows: ${calculateValue(rows)}`}
+          calculateValue={calculateValue}
+        />
+        <SliderHandle
+          value={cols}
+          handleChange={handleChangeCols}
+          title={`Cols: ${calculateValue(cols)}`}
+          calculateValue={calculateValue}
+        />
+      </Stack>
     </Box>
   );
 };

@@ -1,25 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Cell from './Cell';
+import { BoardSize } from '../types';
 
-const SIZE = {
-  rows: 8,
-  cols: 10,
-};
+interface BoardProps {
+  size: BoardSize;
+}
 
-const Board: React.FC = () => {
+const Board: React.FC<BoardProps> = ({ size }) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
   const [cellSize, setCellSize] = useState(0);
 
   const handleResize = useCallback(() => {
     if (tableRef.current)
-      setCellSize(Math.floor(tableRef.current!.offsetWidth / SIZE.cols));
+      setCellSize(Math.floor(tableRef.current!.offsetWidth / size.cols));
     console.log(tableRef.current!.offsetWidth);
     console.log(window.innerWidth);
     console.log(
-      `New size: ${Math.floor(tableRef.current!.offsetWidth / SIZE.cols)}`
+      `New size: ${Math.floor(tableRef.current!.offsetWidth / size.cols)}`
     );
     // eslint-disable-next-line
-  }, [window.innerWidth]);
+  }, [window.innerWidth, size]);
 
   useEffect(() => {
     if (!tableRef.current) return;
@@ -35,11 +35,11 @@ const Board: React.FC = () => {
   return (
     <table className="board" ref={tableRef}>
       <tbody>
-        {Array(SIZE.rows)
+        {Array(size.rows)
           .fill(0)
           .map((_, i) => (
             <tr key={i}>
-              {Array(SIZE.cols)
+              {Array(size.cols)
                 .fill(0)
                 .map((_, i) => (
                   <td
