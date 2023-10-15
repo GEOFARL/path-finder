@@ -8,21 +8,25 @@ import {
   setNumberOfRows,
 } from '../app/features/board/boardSlice';
 import { RootState } from '../app/store';
+import useShuffle from '../hooks/useShuffle';
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
   const { numOfCols, numOfRows } = useSelector(
     (state: RootState) => state.board
   );
+  const handleShuffle = useShuffle();
 
   const handleChangeRows = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(setNumberOfRows(newValue));
+      handleShuffle();
     }
   };
   const handleChangeCols = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(setNumberOfCols(newValue));
+      handleShuffle();
     }
   };
 

@@ -36,3 +36,14 @@ export const getDefaultEndPosition = (
     col,
   };
 };
+
+export const shufflePositions = (
+  rows: number,
+  cols: number
+): [Position, Position] => {
+  const startingPos: Position = {
+    row: Math.floor(Math.random() * rows),
+    col: Math.floor(Math.random() * cols),
+  };
+  return [startingPos, getDefaultEndPosition(rows, cols, startingPos)];
+};

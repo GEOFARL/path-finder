@@ -17,7 +17,17 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <Box minHeight="100vh" bgcolor="#f8fafc">
+        <Box
+          minHeight="100vh"
+          bgcolor="#f8fafc"
+          p={{
+            xs: '0.5rem',
+            sm: '0',
+          }}
+          pb={{
+            xs: '2rem',
+          }}
+        >
           <Container>
             <Header />
             <Main />

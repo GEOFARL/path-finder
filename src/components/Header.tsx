@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import MenuBar from './MenuBar';
 
 const Header: React.FC = () => {
   return (
@@ -6,6 +7,27 @@ const Header: React.FC = () => {
       pt={{
         xs: '2rem',
         lg: '3rem',
+      }}
+      display={{
+        xs: 'flex',
+      }}
+      alignItems={{
+        xs: 'center',
+      }}
+      justifyContent={{
+        xs: 'center',
+      }}
+      flexDirection={{
+        xs: 'column',
+        sm: 'row',
+      }}
+      gap={{
+        xs: '1rem',
+        sm: '4rem',
+      }}
+      mb={{
+        xs: '2rem',
+        sm: '0',
       }}
     >
       <Typography
@@ -19,6 +41,7 @@ const Header: React.FC = () => {
       >
         Path Finder
       </Typography>
+      <MenuBar />
     </Box>
   );
 };

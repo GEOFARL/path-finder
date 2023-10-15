@@ -28,8 +28,6 @@ const Board: React.FC<BoardProps> = ({ size }) => {
     if (row === startPosition.row && col === startPosition.col) {
       return <Cell type={CellType.START} />;
     } else if (row === endPosition.row && col === endPosition.col) {
-      console.log(row, col);
-      console.log(endPosition);
       return <Cell type={CellType.END} />;
     }
     return <Cell type={CellType.EMPTY} />;
