@@ -3,8 +3,7 @@ import Cell from './Cell';
 import { BoardSize, CellType } from '../types';
 import useResize from '../hooks/useResize';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
-import { setCellSize } from '../app/features/board/boardSlice';
+import { selectBoard, setCellSize } from '../app/features/board/boardSlice';
 import useTableListeners from '../hooks/useTableListeners';
 import useIsWall from '../hooks/useIsWall';
 
@@ -16,9 +15,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   const dispatch = useDispatch();
-  const { cellSize, startPosition, endPosition } = useSelector(
-    (state: RootState) => state.board
-  );
+  const { cellSize, startPosition, endPosition } = useSelector(selectBoard);
 
   const isWall = useIsWall();
 

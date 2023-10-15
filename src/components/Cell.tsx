@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { CellType, Position } from '../types';
-import useCellListeners from '../hooks/useCellListeners';
 
 interface CellProps {
   type: CellType;
@@ -33,8 +32,6 @@ const Cell: React.FC<CellProps> = ({ type, position }) => {
   const cellTypeClassNames = calculateClassNames(type);
 
   const { row, col } = position;
-
-  useCellListeners(type, row, col, cellRef);
 
   return (
     <div

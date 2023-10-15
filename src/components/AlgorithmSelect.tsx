@@ -1,12 +1,12 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { Algorithm } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
 import { setAlgorithm } from '../app/features/algorithms/algorithmsSlice';
+import { selectAlgorithm } from '../app/features/board/boardSlice';
 
 const AlgorithmSelect: React.FC = () => {
   const dispatch = useDispatch();
-  const { type } = useSelector((state: RootState) => state.algorithms);
+  const { type } = useSelector(selectAlgorithm);
 
   return (
     <FormControl fullWidth size="small">

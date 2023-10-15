@@ -1,28 +1,31 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
 import {
   addWall,
   removeWall,
+  selectBoard,
   setIsMousePressed,
 } from '../app/features/board/boardSlice';
+import useIsWall from './useIsWall';
 
 export default function useTableListeners(
   tableRef: React.MutableRefObject<HTMLTableElement | null>
 ) {
   const dispatch = useDispatch();
-  const { startPosition, endPosition, walls } = useSelector(
-    (state: RootState) => state.board
+  const { startPosition, endPosition, walls, isMousePressed } =
+    useSelector(selectBoard);
+
+  const isWall = useIsWall();
+
+  const isValid = useCallback(
+    (row: number, col: number) =>
+      (row !== startPosition.row || col !== startPosition.col) &&
+      (row !== endPosition.row || col !== endPosition.col),
+    [startPosition.row, startPosition.col, endPosition.row, endPosition.col]
   );
 
-  useEffect(() => {
-    if (!tableRef.current) return;
-
-    const isValid = (row: number, col: number) =>
-      (row !== startPosition.row || col !== startPosition.col) &&
-      (row !== endPosition.row || col !== endPosition.col);
-
-    const handleMouseDown = (e: Event) => {
+  const handleMouseDown = useCallback(
+    (e: Event) => {
       if (!(e.target instanceof HTMLDivElement)) {
         return;
       }
@@ -39,7 +42,33 @@ export default function useTableListeners(
           dispatch(addWall({ row, col }));
         }
       }
-    };
+    },
+    [walls, dispatch, isValid]
+  );
+
+  const handleMouseOverTable = useCallback(
+    (e: Event) => {
+      e.stopPropagation();
+      if (!(e.target instanceof HTMLDivElement)) {
+        return;
+      }
+
+      const row = +e.target.dataset['row']!;
+      const col = +e.target.dataset['col']!;
+
+      if (isMousePressed) {
+        if (isWall(row, col)) {
+          dispatch(removeWall({ row, col }));
+        } else {
+          dispatch(addWall({ row, col }));
+        }
+      }
+    },
+    [dispatch, isMousePressed, isWall]
+  );
+
+  useEffect(() => {
+    if (!tableRef.current) return;
 
     const handleMouseUp = () => {
       dispatch(setIsMousePressed(false));
@@ -47,10 +76,6 @@ export default function useTableListeners(
 
     const handleMouseOverWindow = () => {
       dispatch(setIsMousePressed(false));
-    };
-
-    const handleMouseOverTable = (e: Event) => {
-      e.stopPropagation();
     };
 
     const table = tableRef.current;
@@ -66,5 +91,5 @@ export default function useTableListeners(
       table?.removeEventListener('mousedown', handleMouseDown);
       table?.removeEventListener('mouseup', handleMouseUp);
     };
-  });
+  }, [dispatch, tableRef, isWall, handleMouseDown, handleMouseOverTable]);
 }

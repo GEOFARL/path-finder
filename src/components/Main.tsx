@@ -4,17 +4,15 @@ import { BoardSize } from '../types';
 import { calculateValue } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  selectBoard,
   setNumberOfCols,
   setNumberOfRows,
 } from '../app/features/board/boardSlice';
-import { RootState } from '../app/store';
 import useShuffle from '../hooks/useShuffle';
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
-  const { numOfCols, numOfRows } = useSelector(
-    (state: RootState) => state.board
-  );
+  const { numOfCols, numOfRows } = useSelector(selectBoard);
   const handleShuffle = useShuffle();
 
   const handleChangeRows = (_: Event, newValue: number | number[]) => {

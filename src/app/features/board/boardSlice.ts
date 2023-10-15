@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import {
   DEFAULT_END_POSITION,
@@ -7,6 +7,7 @@ import {
   DEFAULT_START_POSITION,
 } from '../../../constants';
 import { Position } from '../../../types';
+import { RootState } from '../../store';
 
 export interface BoardState {
   numOfRows: number;
@@ -72,5 +73,22 @@ export const {
   removeWall,
   setIsMousePressed,
 } = boardSlice.actions;
+
+export const selectAlgorithm = createSelector(
+  (state: RootState) => state.algorithms,
+  (algorithms) => algorithms
+);
+export const selectBoard = createSelector(
+  (state: RootState) => state.board,
+  (board) => board
+);
+export const selectWalls = createSelector(
+  (state: RootState) => state.board,
+  (board) => board.walls
+);
+export const selectBoardDimensions = createSelector(
+  (state: RootState) => state.board,
+  (board) => ({ numOfRows: board.numOfRows, numOfCols: board.numOfCols })
+);
 
 export default boardSlice.reducer;

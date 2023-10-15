@@ -1,24 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { calculateValue, shufflePositions } from '../utils';
 import {
+  selectBoardDimensions,
   setEndPosition,
   setStartPosition,
 } from '../app/features/board/boardSlice';
 
 export default function useShuffle() {
   const dispatch = useDispatch();
-  const { numOfRows, numOfCols } = useSelector(
-    (state: RootState) => state.board
-  );
+  const { numOfRows, numOfCols } = useSelector(selectBoardDimensions);
 
   const handleShuffle = () => {
     const [start, end] = shufflePositions(
       calculateValue(numOfRows),
       calculateValue(numOfCols)
     );
-    dispatch(setStartPosition(start));
-    dispatch(setEndPosition(end));
+    batch(() => {
+      dispatch(setStartPosition(start));
+      dispatch(setEndPosition(end));
+    });
   };
 
   return handleShuffle;

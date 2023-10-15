@@ -1,14 +1,12 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { AnimationSpeed } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
 import { setSpeed } from '../app/features/algorithms/algorithmsSlice';
+import { selectAlgorithm } from '../app/features/board/boardSlice';
 
 const SpeedSelect: React.FC = () => {
   const dispatch = useDispatch();
-  const { speed: animationSpeed } = useSelector(
-    (state: RootState) => state.algorithms
-  );
+  const { speed: animationSpeed } = useSelector(selectAlgorithm);
 
   return (
     <ToggleButtonGroup
