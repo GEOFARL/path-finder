@@ -15,11 +15,6 @@ export default function useResize({
   const handleResize = useCallback(() => {
     if (ref.current)
       setCellSize(Math.floor(ref.current!.offsetWidth / size.cols));
-    console.log(ref.current!.offsetWidth);
-    console.log(window.innerWidth);
-    console.log(
-      `New size: ${Math.floor(ref.current!.offsetWidth / size.cols)}`
-    );
     // eslint-disable-next-line
   }, [window.innerWidth, size]);
 

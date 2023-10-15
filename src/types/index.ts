@@ -13,3 +13,15 @@ export enum Algorithm {
   A_STAR = 'A*',
   BFS = 'BFS',
 }
+
+export enum CellType {
+  WALL = 'WALL',
+  START = 'START',
+  END = 'END',
+  EMPTY = 'EMPTY',
+}
+
+export interface Position {
+  row: number;
+  col: number;
+}

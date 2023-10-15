@@ -25,3 +25,11 @@
   display: grid;
   place-content: center;
 }
+
+.board__cell--start {
+  background-color: green;
+}
+
+.board__cell--end {
+  background-color: red;
+}
