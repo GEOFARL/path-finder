@@ -1,18 +1,25 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const Header: React.FC = () => {
   return (
-    <Typography
-      variant="h2"
-      component="h1"
-      sx={{
-        fontWeight: 600,
-        textAlign: 'center',
-        textTransform: 'uppercase',
+    <Box
+      pt={{
+        xs: '2rem',
+        lg: '3rem',
       }}
     >
-      Path Finder
-    </Typography>
+      <Typography
+        variant="h2"
+        component="h1"
+        sx={{
+          fontWeight: 600,
+          textAlign: 'center',
+          textTransform: 'uppercase',
+        }}
+      >
+        Path Finder
+      </Typography>
+    </Box>
   );
 };
 

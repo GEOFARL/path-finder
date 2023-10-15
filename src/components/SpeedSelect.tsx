@@ -20,7 +20,7 @@ const SpeedSelect: React.FC = () => {
       color="standard"
     >
       {Object.entries(AnimationSpeed).map((value) => (
-        <ToggleButton value={value[0]} aria-label={value[1]}>
+        <ToggleButton value={value[0]} aria-label={value[1]} key={value[1]}>
           {value[1]}
         </ToggleButton>
       ))}

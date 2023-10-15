@@ -4,15 +4,21 @@ import SpeedSelect from './SpeedSelect';
 
 const ControlMenu: React.FC = () => {
   return (
-    <Box sx={{ marginTop: '3rem' }}>
+    <Box
+      mt={{
+        xs: '1rem',
+        md: '1.5rem',
+        lg: '2rem',
+      }}
+    >
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <AlgorithmSelect />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <SpeedSelect />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Button fullWidth variant="contained">
             Solve
           </Button>

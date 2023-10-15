@@ -7,7 +7,7 @@ enum Algorithm {
 }
 
 const AlgorithmSelect: React.FC = () => {
-  const [algorithm, setAlgorithm] = useState<Algorithm>(Algorithm.A_STAR);
+  const [algorithm, setAlgorithm] = useState<Algorithm>('A_STAR' as Algorithm);
 
   return (
     <FormControl fullWidth size="small">
