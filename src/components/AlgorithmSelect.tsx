@@ -1,9 +1,12 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useState } from 'react';
 import { Algorithm } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { setAlgorithm } from '../app/features/algorithms/algorithmsSlice';
 
 const AlgorithmSelect: React.FC = () => {
-  const [algorithm, setAlgorithm] = useState<Algorithm>('A_STAR' as Algorithm);
+  const dispatch = useDispatch();
+  const { type } = useSelector((state: RootState) => state.algorithms);
 
   return (
     <FormControl fullWidth size="small">
@@ -12,9 +15,9 @@ const AlgorithmSelect: React.FC = () => {
       </InputLabel>
       <Select
         labelId="select-searching-algorithm"
-        value={algorithm}
+        value={type}
         label="Searching Algorithm"
-        onChange={(e) => setAlgorithm(e.target.value as Algorithm)}
+        onChange={(e) => dispatch(setAlgorithm(e.target.value as Algorithm))}
       >
         {Object.entries(Algorithm).map((value) => (
           <MenuItem value={value[0]} key={value[0]}>

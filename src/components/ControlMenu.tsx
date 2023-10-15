@@ -27,13 +27,13 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
       }}
     >
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6}>
           <AlgorithmSelect />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6}>
           <SpeedSelect />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <Button fullWidth variant="contained">
             Solve
           </Button>

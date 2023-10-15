@@ -3,18 +3,18 @@ import { BoardSize } from '../types';
 
 interface useResizeParameters {
   ref: React.MutableRefObject<HTMLElement | null>;
-  setCellSize: React.Dispatch<React.SetStateAction<number>>;
+  changeCellSize: (val: number) => void;
   size: BoardSize;
 }
 
 export default function useResize({
   ref,
-  setCellSize,
+  changeCellSize,
   size,
 }: useResizeParameters) {
   const handleResize = useCallback(() => {
     if (ref.current)
-      setCellSize(Math.floor(ref.current!.offsetWidth / size.cols));
+      changeCellSize(Math.floor(ref.current!.offsetWidth / size.cols));
     // eslint-disable-next-line
   }, [window.innerWidth, size]);
 

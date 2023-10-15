@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Cell from './Cell';
-import { BoardSize, CellType, Position } from '../types';
+import { BoardSize, CellType } from '../types';
 import useResize from '../hooks/useResize';
-import { DEFAULT_END_POSITION, DEFAULT_START_POSITION } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { setCellSize } from '../app/features/board/boardSlice';
 
 interface BoardProps {
   size: BoardSize;
@@ -10,20 +12,24 @@ interface BoardProps {
 
 const Board: React.FC<BoardProps> = ({ size }) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
-  const [cellSize, setCellSize] = useState(0);
 
-  const [startPosition, setStartPosition] = useState<Position>(
-    DEFAULT_START_POSITION
+  const dispatch = useDispatch();
+  const { cellSize, startPosition, endPosition } = useSelector(
+    (state: RootState) => state.board
   );
-  const [endPosition, setEndPosition] =
-    useState<Position>(DEFAULT_END_POSITION);
 
-  useResize({ ref: tableRef, setCellSize, size });
+  useResize({
+    ref: tableRef,
+    changeCellSize: (val: number) => dispatch(setCellSize(val)),
+    size,
+  });
 
   const getCell = (row: number, col: number) => {
-    if (row === startPosition.row && col === endPosition.col) {
+    if (row === startPosition.row && col === startPosition.col) {
       return <Cell type={CellType.START} />;
-    } else if (row === endPosition.row && col === endPosition.row) {
+    } else if (row === endPosition.row && col === endPosition.col) {
+      console.log(row, col);
+      console.log(endPosition);
       return <Cell type={CellType.END} />;
     }
     return <Cell type={CellType.EMPTY} />;

@@ -1,22 +1,28 @@
-import { useState } from 'react';
 import Board from './Board';
 import ControlMenu from './ControlMenu';
 import { BoardSize } from '../types';
 import { calculateValue } from '../utils';
-import { DEFAULT_NUMBER_OF_COLS, DEFAULT_NUMBER_OF_ROWS } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setNumberOfCols,
+  setNumberOfRows,
+} from '../app/features/board/boardSlice';
+import { RootState } from '../app/store';
 
 const Main: React.FC = () => {
-  const [numOfRows, setNumOfRows] = useState(DEFAULT_NUMBER_OF_ROWS);
-  const [numOfCols, setNumOfCols] = useState(DEFAULT_NUMBER_OF_COLS);
+  const dispatch = useDispatch();
+  const { numOfCols, numOfRows } = useSelector(
+    (state: RootState) => state.board
+  );
 
   const handleChangeRows = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
-      setNumOfRows(newValue);
+      dispatch(setNumberOfRows(newValue));
     }
   };
   const handleChangeCols = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
-      setNumOfCols(newValue);
+      dispatch(setNumberOfCols(newValue));
     }
   };
 

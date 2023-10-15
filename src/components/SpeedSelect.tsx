@@ -1,14 +1,20 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useState } from 'react';
 import { AnimationSpeed } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { setSpeed } from '../app/features/algorithms/algorithmsSlice';
 
 const SpeedSelect: React.FC = () => {
-  const [speed, setSpeed] = useState<AnimationSpeed>(AnimationSpeed.MEDIUM);
+  const dispatch = useDispatch();
+  const { speed: animationSpeed } = useSelector(
+    (state: RootState) => state.algorithms
+  );
+
   return (
     <ToggleButtonGroup
-      value={speed}
+      value={animationSpeed}
       exclusive
-      onChange={(_, newSpeed) => setSpeed(newSpeed as AnimationSpeed)}
+      onChange={(_, newSpeed) => dispatch(setSpeed(newSpeed as AnimationSpeed))}
       aria-label="text alignment"
       fullWidth
       size="small"

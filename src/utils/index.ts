@@ -7,6 +7,17 @@ export const calculateValue = (val: number) => {
   else return 50 + 25 * (val - 12);
 };
 
+const isAround = (targetPos: Position, srcPosition: Position) => {
+  const startRow = srcPosition.row - 1;
+  const endRow = srcPosition.row + 1;
+
+  const startCol = srcPosition.col - 1;
+  const endCol = srcPosition.col + 1;
+
+  const { row: y, col: x } = targetPos;
+  return y >= startRow && y <= endRow && x >= startCol && x <= endCol;
+};
+
 export const getDefaultEndPosition = (
   rows: number,
   cols: number,
@@ -15,7 +26,7 @@ export const getDefaultEndPosition = (
   let row = Math.floor(Math.random() * rows);
   let col = Math.floor(Math.random() * cols);
 
-  while (row === startingPosition.row && col === startingPosition.col) {
+  while (isAround({ row, col }, startingPosition)) {
     row = Math.floor(Math.random() * rows);
     col = Math.floor(Math.random() * cols);
   }
