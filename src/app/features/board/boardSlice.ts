@@ -57,6 +57,9 @@ export const boardSlice = createSlice({
         (wallPos) => wallPos.row !== row || wallPos.col !== col
       );
     },
+    resetWalls: (state) => {
+      state.walls = [];
+    },
     setIsMousePressed: (state, action: PayloadAction<boolean>) => {
       state.isMousePressed = action.payload;
     },
@@ -71,6 +74,7 @@ export const {
   setEndPosition,
   addWall,
   removeWall,
+  resetWalls,
   setIsMousePressed,
 } = boardSlice.actions;
 

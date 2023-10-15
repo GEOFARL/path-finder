@@ -1,6 +1,7 @@
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { calculateValue, shufflePositions } from '../utils';
 import {
+  resetWalls,
   selectBoardDimensions,
   setEndPosition,
   setStartPosition,
@@ -18,6 +19,7 @@ export default function useShuffle() {
     batch(() => {
       dispatch(setStartPosition(start));
       dispatch(setEndPosition(end));
+      dispatch(resetWalls());
     });
   };
 

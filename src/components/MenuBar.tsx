@@ -9,8 +9,11 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import useShuffle from '../hooks/useShuffle';
+import { useDispatch } from 'react-redux';
+import { resetWalls } from '../app/features/board/boardSlice';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -65,6 +68,8 @@ const MenuBar: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const dispatch = useDispatch();
+
   const handleShuffle = useShuffle();
 
   return (
@@ -99,6 +104,16 @@ const MenuBar: React.FC = () => {
         >
           <ShuffleIcon />
           Shuffle Positions
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            dispatch(resetWalls());
+          }}
+          disableRipple
+        >
+          <DeleteIcon />
+          Reset Walls
         </MenuItem>
         {/* <Divider sx={{ my: 0.5 }} /> */}
       </StyledMenu>

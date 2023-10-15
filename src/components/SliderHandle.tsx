@@ -32,7 +32,7 @@ const SliderHandle: React.FC<SliderProps> = ({
         value={value}
         min={1}
         step={1}
-        max={14}
+        max={11}
         scale={calculateValue}
         getAriaValueText={() => calculateValue(value).toString()}
         valueLabelFormat={() => calculateValue(value).toString()}
