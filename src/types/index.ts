@@ -15,10 +15,10 @@ export enum Algorithm {
 }
 
 export enum CellType {
-  WALL = 'WALL',
-  START = 'START',
-  END = 'END',
-  EMPTY = 'EMPTY',
+  WALL,
+  START,
+  END,
+  EMPTY,
 }
 
 export interface Position {

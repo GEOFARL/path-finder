@@ -1,7 +1,10 @@
-import { CellType } from '../types';
+import { useRef } from 'react';
+import { CellType, Position } from '../types';
+import useCellListeners from '../hooks/useCellListeners';
 
 interface CellProps {
   type: CellType;
+  position: Position;
 }
 
 function calculateClassNames(type: CellType): string {
@@ -25,10 +28,22 @@ function calculateClassNames(type: CellType): string {
   return classNames;
 }
 
-const Cell: React.FC<CellProps> = ({ type }) => {
+const Cell: React.FC<CellProps> = ({ type, position }) => {
+  const cellRef = useRef<HTMLDivElement | null>(null);
   const cellTypeClassNames = calculateClassNames(type);
 
-  return <div className={`board__cell ${cellTypeClassNames}`}></div>;
+  const { row, col } = position;
+
+  useCellListeners(type, row, col, cellRef);
+
+  return (
+    <div
+      className={`board__cell ${cellTypeClassNames}`}
+      ref={cellRef}
+      data-row={row}
+      data-col={col}
+    ></div>
+  );
 };
 
 export default Cell;

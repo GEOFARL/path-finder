@@ -14,6 +14,8 @@ export interface BoardState {
   cellSize: number;
   startPosition: Position;
   endPosition: Position;
+  walls: Position[];
+  isMousePressed: boolean;
 }
 
 const initialState: BoardState = {
@@ -22,6 +24,8 @@ const initialState: BoardState = {
   cellSize: 0,
   startPosition: DEFAULT_START_POSITION,
   endPosition: DEFAULT_END_POSITION,
+  walls: [],
+  isMousePressed: false,
 };
 
 export const boardSlice = createSlice({
@@ -43,6 +47,18 @@ export const boardSlice = createSlice({
     setEndPosition: (state, action: PayloadAction<Position>) => {
       state.endPosition = action.payload;
     },
+    addWall: (state, action: PayloadAction<Position>) => {
+      state.walls.push(action.payload);
+    },
+    removeWall: (state, action: PayloadAction<Position>) => {
+      const { row, col } = action.payload;
+      state.walls = state.walls.filter(
+        (wallPos) => wallPos.row !== row || wallPos.col !== col
+      );
+    },
+    setIsMousePressed: (state, action: PayloadAction<boolean>) => {
+      state.isMousePressed = action.payload;
+    },
   },
 });
 
@@ -52,6 +68,9 @@ export const {
   setCellSize,
   setStartPosition,
   setEndPosition,
+  addWall,
+  removeWall,
+  setIsMousePressed,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

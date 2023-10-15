@@ -27,9 +27,13 @@
 }
 
 .board__cell--start {
-  background-color: green;
+  background-color: #4ade80;
 }
 
 .board__cell--end {
-  background-color: red;
+  background-color: #f87171;
+}
+
+.board__cell--wall {
+  background-color: #cbd5e1;
 }
