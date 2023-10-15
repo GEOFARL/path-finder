@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Cell from './Cell';
 import { BoardSize } from '../types';
+import useResize from '../hooks/useResize';
 
 interface BoardProps {
   size: BoardSize;
@@ -10,27 +11,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
   const [cellSize, setCellSize] = useState(0);
 
-  const handleResize = useCallback(() => {
-    if (tableRef.current)
-      setCellSize(Math.floor(tableRef.current!.offsetWidth / size.cols));
-    console.log(tableRef.current!.offsetWidth);
-    console.log(window.innerWidth);
-    console.log(
-      `New size: ${Math.floor(tableRef.current!.offsetWidth / size.cols)}`
-    );
-    // eslint-disable-next-line
-  }, [window.innerWidth, size]);
-
-  useEffect(() => {
-    if (!tableRef.current) return;
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [handleResize]);
+  useResize({ ref: tableRef, setCellSize, size });
 
   return (
     <table className="board" ref={tableRef}>

@@ -1,11 +1,6 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useState } from 'react';
-
-enum AnimationSpeed {
-  SLOW = 'SLOW',
-  MEDIUM = 'MEDIUM',
-  FAST = 'FAST',
-}
+import { AnimationSpeed } from '../types';
 
 const SpeedSelect: React.FC = () => {
   const [speed, setSpeed] = useState<AnimationSpeed>(AnimationSpeed.MEDIUM);

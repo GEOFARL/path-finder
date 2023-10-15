@@ -1,10 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
-
-enum Algorithm {
-  A_STAR = 'A*',
-  BFS = 'BFS',
-}
+import { Algorithm } from '../types';
 
 const AlgorithmSelect: React.FC = () => {
   const [algorithm, setAlgorithm] = useState<Algorithm>('A_STAR' as Algorithm);

@@ -4,7 +4,7 @@ interface SliderProps {
   value: number;
   handleChange: (e: Event, newValue: number | number[]) => void;
   title: string;
-  calculateValue?: (value: number) => number;
+  calculateValue: (value: number) => number;
 }
 
 const SliderHandle: React.FC<SliderProps> = ({
@@ -22,7 +22,10 @@ const SliderHandle: React.FC<SliderProps> = ({
         },
       }}
     >
-      <Typography id="non-linear-slider" gutterBottom>
+      <Typography
+        id={`slider-${title.split(' ')[0].toLowerCase()}`}
+        gutterBottom
+      >
         {title}
       </Typography>
       <Slider
@@ -31,11 +34,11 @@ const SliderHandle: React.FC<SliderProps> = ({
         step={1}
         max={14}
         scale={calculateValue}
-        getAriaValueText={() => title}
-        valueLabelFormat={() => title}
+        getAriaValueText={() => calculateValue(value).toString()}
+        valueLabelFormat={() => calculateValue(value).toString()}
         onChange={handleChange}
         valueLabelDisplay="auto"
-        aria-labelledby="non-linear-slider"
+        aria-labelledby={`slider-${title.split(' ')[0]}`}
       />
     </Box>
   );
