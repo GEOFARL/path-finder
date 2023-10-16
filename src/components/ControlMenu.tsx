@@ -2,6 +2,7 @@ import { Box, Button, Grid, Stack } from '@mui/material';
 import AlgorithmSelect from './AlgorithmSelect';
 import SpeedSelect from './SpeedSelect';
 import SliderHandle from './SliderHandle';
+import MenuBar from './MenuBar';
 
 interface ControlMenuProps {
   rows: number;
@@ -52,18 +53,32 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
           },
         }}
       >
-        <SliderHandle
-          value={rows}
-          handleChange={handleChangeRows}
-          title={`Rows: ${calculateValue(rows)}`}
-          calculateValue={calculateValue}
-        />
-        <SliderHandle
-          value={cols}
-          handleChange={handleChangeCols}
-          title={`Cols: ${calculateValue(cols)}`}
-          calculateValue={calculateValue}
-        />
+        <Box
+          display="flex"
+          gap={{
+            sx: '1rem',
+            md: '2rem',
+          }}
+          flexDirection={{
+            xs: 'column',
+            md: 'row',
+          }}
+        >
+          <SliderHandle
+            value={rows}
+            handleChange={handleChangeRows}
+            title={`Rows: ${calculateValue(rows)}`}
+            calculateValue={calculateValue}
+          />
+          <SliderHandle
+            value={cols}
+            handleChange={handleChangeCols}
+            title={`Cols: ${calculateValue(cols)}`}
+            calculateValue={calculateValue}
+          />
+        </Box>
+
+        <MenuBar />
       </Stack>
     </Box>
   );

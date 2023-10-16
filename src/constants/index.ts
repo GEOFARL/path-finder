@@ -7,3 +7,5 @@ export const [DEFAULT_START_POSITION, DEFAULT_END_POSITION] = shufflePositions(
   calculateValue(DEFAULT_NUMBER_OF_ROWS),
   calculateValue(DEFAULT_NUMBER_OF_COLS)
 );
+
+export const IS_ANIMATION_ON = true;

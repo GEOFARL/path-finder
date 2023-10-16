@@ -28,6 +28,7 @@ function App() {
           }}
           pb={{
             xs: '2rem',
+            sm: '2rem',
           }}
         >
           <Container>

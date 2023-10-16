@@ -18,7 +18,7 @@ const SliderHandle: React.FC<SliderProps> = ({
       sx={{
         width: {
           xs: '100%',
-          sm: '300px',
+          sm: '200px',
         },
       }}
     >

@@ -6,9 +6,12 @@ import {
   selectBoard,
 } from '../../app/features/board/boardSlice';
 import generateRandomMaze from '../../utils/mazeGeneration/generateRandomMaze';
-import { selectAnimationSpeed } from '../../app/features/algorithms/algorithmsSlice';
+import {
+  selectAnimationSpeed,
+  selectIsAnimationOn,
+} from '../../app/features/algorithms/algorithmsSlice';
 
-import ShuffleIcon from '@mui/icons-material/Shuffle';
+import ExtensionIcon from '@mui/icons-material/Extension';
 import { Position } from '../../types';
 
 interface GenerateRandomMazeOptionProps {
@@ -31,6 +34,7 @@ const GenerateRandomMazeOption: React.FC<GenerateRandomMazeOptionProps> = ({
   const dispatch = useDispatch();
   const board = useSelector(selectBoard);
   const animationSpeed = useSelector(selectAnimationSpeed);
+  const isAnimationOn = useSelector(selectIsAnimationOn);
 
   return (
     <MenuItem
@@ -43,22 +47,28 @@ const GenerateRandomMazeOption: React.FC<GenerateRandomMazeOptionProps> = ({
         let i = 0;
 
         const { startPosition, endPosition } = board;
-        setRandomMazeInterval(
-          setInterval(() => {
-            if (isValid(startPosition, endPosition, walls[i])) {
-              dispatch(addWall(walls[i]));
-              i += 1;
-            }
+        if (isAnimationOn) {
+          setRandomMazeInterval(
+            setInterval(() => {
+              if (isValid(startPosition, endPosition, walls[i])) {
+                dispatch(addWall(walls[i]));
+                i += 1;
+              }
 
-            if (i >= walls.length) {
-              cancelBuildingMaze();
-            }
-          }, animationSpeed)
-        );
+              if (i >= walls.length) {
+                cancelBuildingMaze();
+              }
+            }, animationSpeed)
+          );
+        } else {
+          for (let i = 0; i < walls.length; i += 1) {
+            dispatch(addWall(walls[i]));
+          }
+        }
       }}
       disableRipple
     >
-      <ShuffleIcon />
+      <ExtensionIcon />
       Generate random maze
     </MenuItem>
   );

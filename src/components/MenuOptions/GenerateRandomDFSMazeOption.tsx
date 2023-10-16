@@ -5,9 +5,12 @@ import {
   resetWalls,
   selectBoard,
 } from '../../app/features/board/boardSlice';
-import { selectAnimationSpeed } from '../../app/features/algorithms/algorithmsSlice';
+import {
+  selectAnimationSpeed,
+  selectIsAnimationOn,
+} from '../../app/features/algorithms/algorithmsSlice';
 
-import ShuffleIcon from '@mui/icons-material/Shuffle';
+import SearchIcon from '@mui/icons-material/Search';
 import { Position } from '../../types';
 import generateRandomDFSMaze from '../../utils/mazeGeneration/DFSMaze/generateRandomDFSMaze';
 
@@ -28,6 +31,7 @@ const GenerateRandomDFSMazeOption: React.FC<
   const dispatch = useDispatch();
   const board = useSelector(selectBoard);
   const animationSpeed = useSelector(selectAnimationSpeed);
+  const isAnimationOn = useSelector(selectIsAnimationOn);
 
   return (
     <MenuItem
@@ -39,22 +43,28 @@ const GenerateRandomDFSMazeOption: React.FC<
 
         let i = 0;
         const { startPosition, endPosition } = board;
-        setDFSInterval(
-          setInterval(() => {
-            if (isValid(startPosition, endPosition, walls[i])) {
-              dispatch(addWall(walls[i]));
-              i += 1;
-            }
+        if (isAnimationOn) {
+          setDFSInterval(
+            setInterval(() => {
+              if (isValid(startPosition, endPosition, walls[i])) {
+                dispatch(addWall(walls[i]));
+                i += 1;
+              }
 
-            if (i >= walls.length) {
-              cancelBuildingMaze();
-            }
-          }, animationSpeed)
-        );
+              if (i >= walls.length) {
+                cancelBuildingMaze();
+              }
+            }, animationSpeed)
+          );
+        } else {
+          for (let i = 0; i < walls.length; i += 1) {
+            dispatch(addWall(walls[i]));
+          }
+        }
       }}
       disableRipple
     >
-      <ShuffleIcon />
+      <SearchIcon />
       Generate random DFS maze
     </MenuItem>
   );
