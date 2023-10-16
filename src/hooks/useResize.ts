@@ -13,8 +13,7 @@ export default function useResize({
   size,
 }: useResizeParameters) {
   const handleResize = useCallback(() => {
-    if (ref.current)
-      changeCellSize(Math.floor(ref.current!.offsetWidth / size.cols));
+    if (ref.current) changeCellSize(ref.current!.offsetWidth / size.cols);
     // eslint-disable-next-line
   }, [window.innerWidth, size]);
 

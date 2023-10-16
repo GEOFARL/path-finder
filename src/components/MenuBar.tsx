@@ -10,7 +10,7 @@ import {
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React from 'react';
+import React, { useRef } from 'react';
 import useShuffle from '../hooks/useShuffle';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -20,6 +20,7 @@ import {
 } from '../app/features/board/boardSlice';
 import generateRandomMaze from '../utils/mazeGeneration/generateRandomMaze';
 import generateRandomDFSMaze from '../utils/mazeGeneration/DFSMaze/generateRandomDFSMaze';
+import { selectAnimationSpeed } from '../app/features/algorithms/algorithmsSlice';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -65,6 +66,9 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 const MenuBar: React.FC = () => {
+  const DFSMazeInterval = useRef<number | null>(null);
+  const RandomMazeInterval = useRef<number | null>(null);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -76,6 +80,7 @@ const MenuBar: React.FC = () => {
 
   const dispatch = useDispatch();
   const boardState = useSelector(selectBoard);
+  const animationSpeed = useSelector(selectAnimationSpeed);
 
   const handleShuffle = useShuffle();
 
@@ -105,6 +110,12 @@ const MenuBar: React.FC = () => {
         <MenuItem
           onClick={() => {
             handleClose();
+            if (DFSMazeInterval.current) {
+              clearInterval(DFSMazeInterval.current);
+            }
+            if (RandomMazeInterval.current) {
+              clearInterval(RandomMazeInterval.current);
+            }
             handleShuffle();
           }}
           disableRipple
@@ -115,6 +126,13 @@ const MenuBar: React.FC = () => {
         <MenuItem
           onClick={() => {
             handleClose();
+            if (DFSMazeInterval.current) {
+              clearInterval(DFSMazeInterval.current);
+            }
+            if (RandomMazeInterval.current) {
+              clearInterval(RandomMazeInterval.current);
+            }
+
             dispatch(resetWalls());
           }}
           disableRipple
@@ -124,13 +142,23 @@ const MenuBar: React.FC = () => {
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem
-          onClick={() => {
+          onClick={async () => {
             handleClose();
+            if (DFSMazeInterval.current) {
+              clearInterval(DFSMazeInterval.current);
+            }
             dispatch(resetWalls());
             const walls = generateRandomMaze(boardState);
-            for (let i = 0; i < walls.length; i += 1) {
+            let i = 0;
+
+            RandomMazeInterval.current = setInterval(() => {
               dispatch(addWall(walls[i]));
-            }
+              i += 1;
+
+              if (i >= walls.length) {
+                clearInterval(RandomMazeInterval.current!);
+              }
+            }, animationSpeed);
           }}
           disableRipple
         >
@@ -138,13 +166,23 @@ const MenuBar: React.FC = () => {
           Generate random maze
         </MenuItem>
         <MenuItem
-          onClick={() => {
+          onClick={async () => {
             handleClose();
+            if (RandomMazeInterval.current) {
+              clearInterval(RandomMazeInterval.current);
+            }
             dispatch(resetWalls());
             const walls = generateRandomDFSMaze(boardState);
-            for (let i = 0; i < walls.length; i += 1) {
+
+            let i = 0;
+            DFSMazeInterval.current = setInterval(() => {
               dispatch(addWall(walls[i]));
-            }
+              i += 1;
+
+              if (i >= walls.length) {
+                clearInterval(DFSMazeInterval.current!);
+              }
+            }, animationSpeed);
           }}
           disableRipple
         >

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { CellType, Position } from '../types';
 
 interface CellProps {
@@ -32,27 +32,6 @@ const Cell: React.FC<CellProps> = ({ type, position }) => {
   const cellTypeClassNames = calculateClassNames(type);
 
   const { row, col } = position;
-
-  useEffect(() => {
-    if (type !== CellType.START && type !== CellType.END) {
-      return;
-    }
-
-    const handleDragStart = (e: Event) => {
-      console.log(e);
-    };
-    const handleDragEnd = (e: Event) => {
-      console.log(e);
-    };
-
-    document.addEventListener('dragstart', handleDragStart);
-    document.addEventListener('drop', handleDragEnd);
-
-    return () => {
-      document.removeEventListener('dragstart', handleDragStart);
-      document.removeEventListener('drop', handleDragEnd);
-    };
-  }, [type]);
 
   return (
     <div

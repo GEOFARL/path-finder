@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { Algorithm } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAlgorithm } from '../app/features/algorithms/algorithmsSlice';
-import { selectAlgorithm } from '../app/features/board/boardSlice';
+import { selectAlgorithm } from '../app/features/algorithms/algorithmsSlice';
 
 const AlgorithmSelect: React.FC = () => {
   const dispatch = useDispatch();

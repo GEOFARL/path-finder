@@ -58,6 +58,9 @@ const Board: React.FC<BoardProps> = ({ size }) => {
       const col = Math.floor((targetX - x1) / cellSize);
       const row = Math.floor((targetY - y1) / cellSize);
 
+      console.log((targetX - x1) / cellSize);
+      console.log(col, row, startPosition, endPosition);
+
       if (
         (row === startPosition.row && col === startPosition.col) ||
         (row === endPosition.row && col === endPosition.col) ||
@@ -65,8 +68,6 @@ const Board: React.FC<BoardProps> = ({ size }) => {
       ) {
         return;
       }
-
-      console.log(e);
 
       const isStart = e.target.classList.contains('board__cell--start');
 

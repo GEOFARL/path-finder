@@ -78,10 +78,6 @@ export const {
   setIsMousePressed,
 } = boardSlice.actions;
 
-export const selectAlgorithm = createSelector(
-  (state: RootState) => state.algorithms,
-  (algorithms) => algorithms
-);
 export const selectBoard = createSelector(
   (state: RootState) => state.board,
   (board) => board

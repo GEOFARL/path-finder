@@ -1,15 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { Algorithm, AnimationSpeed } from '../../../types';
+import { RootState } from '../../store';
+
+const SPEED_TABLE = {
+  [AnimationSpeed.FAST]: 15,
+  [AnimationSpeed.MEDIUM]: 40,
+  [AnimationSpeed.SLOW]: 100,
+};
 
 export interface AlgorithmsState {
   type: Algorithm;
-  speed: AnimationSpeed;
+  speed: number;
 }
 
 const initialState: AlgorithmsState = {
   type: 'A_STAR' as Algorithm,
-  speed: AnimationSpeed.MEDIUM,
+  speed: SPEED_TABLE[AnimationSpeed.MEDIUM],
 };
 
 export const algorithmsSlice = createSlice({
@@ -20,10 +27,28 @@ export const algorithmsSlice = createSlice({
       state.type = action.payload;
     },
     setSpeed: (state, action: PayloadAction<AnimationSpeed>) => {
-      state.speed = action.payload;
+      state.speed = SPEED_TABLE[action.payload];
     },
   },
 });
+
+export const selectAlgorithm = createSelector(
+  (state: RootState) => state.algorithms,
+  (algorithms) => algorithms
+);
+
+export const selectAnimationSpeed = createSelector(
+  (state: RootState) => state.algorithms,
+  (algorithms) => algorithms.speed
+);
+
+export const selectAnimationSpeedType = createSelector(
+  (state: RootState) => state.algorithms,
+  (algorithms) =>
+    Object.keys(SPEED_TABLE).find(
+      (key: string) => SPEED_TABLE[key as AnimationSpeed] === algorithms.speed
+    )
+);
 
 export const { setAlgorithm, setSpeed } = algorithmsSlice.actions;
 
