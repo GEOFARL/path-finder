@@ -1,6 +1,6 @@
 import {
   Button,
-  // Divider,
+  Divider,
   Menu,
   MenuItem,
   MenuProps,
@@ -13,7 +13,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import useShuffle from '../hooks/useShuffle';
 import { useDispatch } from 'react-redux';
-import { resetWalls } from '../app/features/board/boardSlice';
+import {
+  generateRandomMaze,
+  resetWalls,
+} from '../app/features/board/boardSlice';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -115,7 +118,17 @@ const MenuBar: React.FC = () => {
           <DeleteIcon />
           Reset Walls
         </MenuItem>
-        {/* <Divider sx={{ my: 0.5 }} /> */}
+        <Divider sx={{ my: 0.5 }} />
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            dispatch(generateRandomMaze());
+          }}
+          disableRipple
+        >
+          <ShuffleIcon />
+          Generate random maze
+        </MenuItem>
       </StyledMenu>
     </div>
   );

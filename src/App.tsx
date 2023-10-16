@@ -13,6 +13,8 @@ import { store } from './app/store';
 let theme = createTheme({});
 theme = responsiveFontSizes(theme);
 
+document.addEventListener('dragover', (e) => e.preventDefault());
+
 function App() {
   return (
     <Provider store={store}>

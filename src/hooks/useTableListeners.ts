@@ -29,18 +29,19 @@ export default function useTableListeners(
       if (!(e.target instanceof HTMLDivElement)) {
         return;
       }
-      dispatch(setIsMousePressed(true));
+
       const row = +e.target.dataset['row']!;
       const col = +e.target.dataset['col']!;
+      if (!isValid(row, col)) {
+        return;
+      }
 
-      if (isValid(row, col)) {
-        if (
-          walls.some((wallPos) => wallPos.row === row && wallPos.col === col)
-        ) {
-          dispatch(removeWall({ row, col }));
-        } else {
-          dispatch(addWall({ row, col }));
-        }
+      dispatch(setIsMousePressed(true));
+
+      if (walls.some((wallPos) => wallPos.row === row && wallPos.col === col)) {
+        dispatch(removeWall({ row, col }));
+      } else {
+        dispatch(addWall({ row, col }));
       }
     },
     [walls, dispatch, isValid]

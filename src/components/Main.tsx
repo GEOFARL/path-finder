@@ -18,13 +18,13 @@ const Main: React.FC = () => {
   const handleChangeRows = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(setNumberOfRows(newValue));
-      handleShuffle();
+      handleShuffle({ rows: newValue });
     }
   };
   const handleChangeCols = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(setNumberOfCols(newValue));
-      handleShuffle();
+      handleShuffle({ cols: newValue });
     }
   };
 

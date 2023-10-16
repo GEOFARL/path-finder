@@ -9,9 +9,14 @@ import {
 
 export default function useShuffle() {
   const dispatch = useDispatch();
-  const { numOfRows, numOfCols } = useSelector(selectBoardDimensions);
+  let { numOfRows, numOfCols } = useSelector(selectBoardDimensions);
 
-  const handleShuffle = () => {
+  const handleShuffle = (newValues?: { rows?: number; cols?: number }) => {
+    if (newValues) {
+      const { rows, cols } = newValues;
+      numOfRows = rows ? rows : numOfRows;
+      numOfCols = cols ? cols : numOfCols;
+    }
     const [start, end] = shufflePositions(
       calculateValue(numOfRows),
       calculateValue(numOfCols)

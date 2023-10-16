@@ -1,9 +1,14 @@
-import React, { useRef } from 'react';
+import React, { DragEvent, useRef } from 'react';
 import Cell from './Cell';
 import { BoardSize, CellType } from '../types';
 import useResize from '../hooks/useResize';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBoard, setCellSize } from '../app/features/board/boardSlice';
+import {
+  selectBoard,
+  setCellSize,
+  setEndPosition,
+  setStartPosition,
+} from '../app/features/board/boardSlice';
 import useTableListeners from '../hooks/useTableListeners';
 import useIsWall from '../hooks/useIsWall';
 
@@ -38,6 +43,41 @@ const Board: React.FC<BoardProps> = ({ size }) => {
     return <Cell type={CellType.EMPTY} position={{ row, col }} />;
   };
 
+  const handleDragEnd = (e: DragEvent) => {
+    e.preventDefault();
+    if (!(e.target instanceof HTMLDivElement)) {
+      return;
+    }
+    const size = tableRef.current?.getBoundingClientRect();
+    const { x: x1, y: y1 } = size!;
+    const x2 = x1 + size!.width;
+    const y2 = y1 + size!.height;
+
+    const { clientX: targetX, clientY: targetY } = e;
+    if (targetX >= x1 && targetX <= x2 && targetY >= y1 && targetY <= y2) {
+      const col = Math.floor((targetX - x1) / cellSize);
+      const row = Math.floor((targetY - y1) / cellSize);
+
+      if (
+        (row === startPosition.row && col === startPosition.col) ||
+        (row === endPosition.row && col === endPosition.col) ||
+        isWall(row, col)
+      ) {
+        return;
+      }
+
+      console.log(e);
+
+      const isStart = e.target.classList.contains('board__cell--start');
+
+      if (isStart) {
+        dispatch(setStartPosition({ row, col }));
+      } else {
+        dispatch(setEndPosition({ row, col }));
+      }
+    }
+  };
+
   return (
     <table className="board" ref={tableRef}>
       <tbody>
@@ -55,6 +95,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
                       height: `${cellSize}px`,
                     }}
                     key={col}
+                    onDragEnd={handleDragEnd}
                   >
                     {getCell(row, col)}
                   </td>
