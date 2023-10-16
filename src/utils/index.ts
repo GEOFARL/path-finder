@@ -47,3 +47,5 @@ export const shufflePositions = (
   };
   return [startingPos, getDefaultEndPosition(rows, cols, startingPos)];
 };
+
+export { canWallBePlaced } from './validation';
