@@ -21,6 +21,7 @@ import {
 import generateRandomMaze from '../utils/mazeGeneration/generateRandomMaze';
 import generateRandomDFSMaze from '../utils/mazeGeneration/DFSMaze/generateRandomDFSMaze';
 import { selectAnimationSpeed } from '../app/features/algorithms/algorithmsSlice';
+import { Position } from '../types';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -83,6 +84,23 @@ const MenuBar: React.FC = () => {
   const animationSpeed = useSelector(selectAnimationSpeed);
 
   const handleShuffle = useShuffle();
+
+  const isValid = (
+    startPosition: Position,
+    endPosition: Position,
+    targetPosition: Position
+  ): boolean => {
+    return (
+      !(
+        startPosition.row === targetPosition.row &&
+        startPosition.col === targetPosition.col
+      ) ||
+      !(
+        endPosition.row === targetPosition.row &&
+        endPosition.col === targetPosition.col
+      )
+    );
+  };
 
   return (
     <div>
@@ -151,9 +169,12 @@ const MenuBar: React.FC = () => {
             const walls = generateRandomMaze(boardState);
             let i = 0;
 
+            const { startPosition, endPosition } = boardState;
             RandomMazeInterval.current = setInterval(() => {
-              dispatch(addWall(walls[i]));
-              i += 1;
+              if (isValid(startPosition, endPosition, walls[i])) {
+                dispatch(addWall(walls[i]));
+                i += 1;
+              }
 
               if (i >= walls.length) {
                 clearInterval(RandomMazeInterval.current!);
@@ -175,9 +196,12 @@ const MenuBar: React.FC = () => {
             const walls = generateRandomDFSMaze(boardState);
 
             let i = 0;
+            const { startPosition, endPosition } = boardState;
             DFSMazeInterval.current = setInterval(() => {
-              dispatch(addWall(walls[i]));
-              i += 1;
+              if (isValid(startPosition, endPosition, walls[i])) {
+                dispatch(addWall(walls[i]));
+                i += 1;
+              }
 
               if (i >= walls.length) {
                 clearInterval(DFSMazeInterval.current!);
