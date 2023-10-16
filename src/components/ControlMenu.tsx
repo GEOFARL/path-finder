@@ -4,6 +4,8 @@ import SpeedSelect from './SpeedSelect';
 import SliderHandle from './SliderHandle';
 import MenuBar from './MenuBar';
 import useSolveGrid from '../hooks/useSolveGrid';
+import { useState } from 'react';
+import ErrorMessage from './ErrorMessage';
 
 interface ControlMenuProps {
   rows: number;
@@ -20,6 +22,18 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
   handleChangeRows,
   calculateValue,
 }) => {
+  const [error, setError] = useState<{ open: boolean; error: null | string }>({
+    open: false,
+    error: null,
+  });
+
+  const handleClose = () => {
+    setError({
+      open: false,
+      error: null,
+    });
+  };
+
   const solveGrid = useSolveGrid();
   return (
     <Box
@@ -37,7 +51,21 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
           <SpeedSelect />
         </Grid>
         <Grid item xs={12}>
-          <Button fullWidth variant="contained" onClick={solveGrid}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => {
+              try {
+                solveGrid();
+              } catch (error) {
+                if (!(error instanceof Error)) return;
+                setError({
+                  open: true,
+                  error: error.message,
+                });
+              }
+            }}
+          >
             Solve
           </Button>
         </Grid>
@@ -82,6 +110,14 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
 
         <MenuBar />
       </Stack>
+
+      {error.open && (
+        <ErrorMessage
+          errorMessage={error.error!}
+          handleClose={handleClose}
+          open={error.open}
+        />
+      )}
     </Box>
   );
 };

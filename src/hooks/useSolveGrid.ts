@@ -38,7 +38,11 @@ export default function useSolveGrid() {
     }
 
     const { visitedCellsArray, path, error } = result;
-    console.error(error);
+
+    if (error) {
+      throw new Error(error);
+    }
+
     path.reverse();
 
     let i = 0;

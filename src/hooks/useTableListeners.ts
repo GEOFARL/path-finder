@@ -7,21 +7,34 @@ import {
   setIsMousePressed,
 } from '../app/features/board/boardSlice';
 import useIsWall from './useIsWall';
+import useIsVisited from './useIsVisited';
+import useIsPath from './useIsPath';
 
 export default function useTableListeners(
   tableRef: React.MutableRefObject<HTMLTableElement | null>
 ) {
   const dispatch = useDispatch();
-  const { startPosition, endPosition, walls, isMousePressed } =
+  const { startPosition, endPosition, isMousePressed } =
     useSelector(selectBoard);
 
   const isWall = useIsWall();
+  const isVisited = useIsVisited();
+  const isPath = useIsPath();
 
   const isValid = useCallback(
     (row: number, col: number) =>
       (row !== startPosition.row || col !== startPosition.col) &&
-      (row !== endPosition.row || col !== endPosition.col),
-    [startPosition.row, startPosition.col, endPosition.row, endPosition.col]
+      (row !== endPosition.row || col !== endPosition.col) &&
+      !isPath(row, col) &&
+      !isVisited(row, col),
+    [
+      startPosition.row,
+      startPosition.col,
+      endPosition.row,
+      endPosition.col,
+      isPath,
+      isVisited,
+    ]
   );
 
   const handleMouseDown = useCallback(
@@ -38,13 +51,13 @@ export default function useTableListeners(
 
       dispatch(setIsMousePressed(true));
 
-      if (walls.some((wallPos) => wallPos.row === row && wallPos.col === col)) {
+      if (isWall(row, col)) {
         dispatch(removeWall({ row, col }));
       } else {
         dispatch(addWall({ row, col }));
       }
     },
-    [walls, dispatch, isValid]
+    [dispatch, isValid, isWall]
   );
 
   const handleMouseOverTable = useCallback(
