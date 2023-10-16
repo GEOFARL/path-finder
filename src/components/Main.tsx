@@ -4,6 +4,7 @@ import { BoardSize } from '../types';
 import { calculateValue } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetSolution,
   selectBoard,
   setNumberOfCols,
   setNumberOfRows,
@@ -17,12 +18,14 @@ const Main: React.FC = () => {
 
   const handleChangeRows = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
+      dispatch(resetSolution());
       dispatch(setNumberOfRows(newValue));
       handleShuffle({ rows: newValue });
     }
   };
   const handleChangeCols = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
+      dispatch(resetSolution());
       dispatch(setNumberOfCols(newValue));
       handleShuffle({ cols: newValue });
     }

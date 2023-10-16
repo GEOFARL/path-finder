@@ -1,15 +1,15 @@
 import { MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { resetWalls } from '../../app/features/board/boardSlice';
+import { resetSolution, resetWalls } from '../../app/features/board/boardSlice';
 
-import FenceIcon from '@mui/icons-material/Fence';
+import CloseIcon from '@mui/icons-material/Close';
 
-interface ResetWallsOptionProps {
+interface ResetOptionProps {
   handleClose: () => void;
   cancelBuildingMaze: () => void;
 }
 
-const ResetWallsOption: React.FC<ResetWallsOptionProps> = ({
+const ResetOption: React.FC<ResetOptionProps> = ({
   handleClose,
   cancelBuildingMaze,
 }) => {
@@ -22,13 +22,14 @@ const ResetWallsOption: React.FC<ResetWallsOptionProps> = ({
         cancelBuildingMaze();
 
         dispatch(resetWalls());
+        dispatch(resetSolution());
       }}
       disableRipple
     >
-      <FenceIcon />
-      Reset Walls
+      <CloseIcon />
+      Reset
     </MenuItem>
   );
 };
 
-export default ResetWallsOption;
+export default ResetOption;

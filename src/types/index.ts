@@ -19,9 +19,13 @@ export enum CellType {
   START,
   END,
   EMPTY,
+  VISITED,
+  PATH,
 }
 
 export interface Position {
   row: number;
   col: number;
 }
+
+export type { SearcherResult, IPathSearcher } from './pathSearcher';

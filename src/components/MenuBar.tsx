@@ -9,6 +9,8 @@ import StyledMenu from './StyledMenu';
 import { canWallBePlaced } from '../utils';
 import useMazeIntervals from '../hooks/useMazeIntervals';
 import AnimationSwitch from './AnimationSwitch';
+import ResetSolutionOption from './MenuOptions/ResetSolutionOption';
+import ResetOption from './MenuOptions/ResetOption';
 
 const MenuBar: React.FC = () => {
   const { cancelBuildingMaze, setDFSInterval, setRandomMazeInterval } =
@@ -64,6 +66,14 @@ const MenuBar: React.FC = () => {
             handleClose={handleClose}
           />
           <ResetWallsOption
+            cancelBuildingMaze={cancelBuildingMaze}
+            handleClose={handleClose}
+          />
+          <ResetSolutionOption
+            cancelBuildingMaze={cancelBuildingMaze}
+            handleClose={handleClose}
+          />
+          <ResetOption
             cancelBuildingMaze={cancelBuildingMaze}
             handleClose={handleClose}
           />

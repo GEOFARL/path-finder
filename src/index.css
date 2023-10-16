@@ -39,6 +39,53 @@
   animation: wallAnimation 250ms ease-in;
 }
 
+.board__cell--visited {
+  animation: visitedAnimation 1.5s forwards ease-in;
+}
+
+.board__cell--shortest-path {
+  animation: shortestPathAnimation 500ms forwards ease-in;
+}
+
+@keyframes shortestPathAnimation {
+  0% {
+    transform: scale(0.5);
+    background-color: rgba(151, 143, 70, 0.75);
+    border-radius: 50%;
+  }
+  50% {
+    transform: scale(0.8);
+    background-color: rgba(192, 187, 39, 0.75);
+  }
+  75% {
+    transform: scale(0.9);
+    background-color: rgba(247, 235, 130, 0.75);
+  }
+  100% {
+    transform: scale(1);
+    background-color: #ffc300;
+  }
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 50%;
+  }
+  50% {
+    background-color: #075985;
+  }
+  75% {
+    transform: scale(1.2);
+    background-color: #7c3aed;
+  }
+  100% {
+    transform: scale(1);
+    background-color: #38bdf8;
+  }
+}
+
 @keyframes wallAnimation {
   0% {
     transform: scale(1);

@@ -16,6 +16,8 @@ export interface BoardState {
   startPosition: Position;
   endPosition: Position;
   walls: Position[];
+  visitedPositions: Position[];
+  pathPositions: Position[];
   isMousePressed: boolean;
 }
 
@@ -26,6 +28,8 @@ const initialState: BoardState = {
   startPosition: DEFAULT_START_POSITION,
   endPosition: DEFAULT_END_POSITION,
   walls: [],
+  visitedPositions: [],
+  pathPositions: [],
   isMousePressed: false,
 };
 
@@ -63,6 +67,16 @@ export const boardSlice = createSlice({
     setIsMousePressed: (state, action: PayloadAction<boolean>) => {
       state.isMousePressed = action.payload;
     },
+    addVisitedPosition: (state, action: PayloadAction<Position>) => {
+      state.visitedPositions.push(action.payload);
+    },
+    addPathPosition: (state, action: PayloadAction<Position>) => {
+      state.pathPositions.push(action.payload);
+    },
+    resetSolution: (state) => {
+      state.visitedPositions = [];
+      state.pathPositions = [];
+    },
   },
 });
 
@@ -76,6 +90,9 @@ export const {
   removeWall,
   resetWalls,
   setIsMousePressed,
+  addVisitedPosition,
+  addPathPosition,
+  resetSolution,
 } = boardSlice.actions;
 
 export const selectBoard = createSelector(
@@ -89,6 +106,14 @@ export const selectWalls = createSelector(
 export const selectBoardDimensions = createSelector(
   (state: RootState) => state.board,
   (board) => ({ numOfRows: board.numOfRows, numOfCols: board.numOfCols })
+);
+export const selectVisitedPositions = createSelector(
+  (state: RootState) => state.board,
+  (board) => board.visitedPositions
+);
+export const selectPathPositions = createSelector(
+  (state: RootState) => state.board,
+  (board) => board.pathPositions
 );
 
 export default boardSlice.reducer;

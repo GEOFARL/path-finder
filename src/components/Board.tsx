@@ -4,6 +4,7 @@ import { BoardSize, CellType } from '../types';
 import useResize from '../hooks/useResize';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetSolution,
   selectBoard,
   setCellSize,
   setEndPosition,
@@ -11,6 +12,8 @@ import {
 } from '../app/features/board/boardSlice';
 import useTableListeners from '../hooks/useTableListeners';
 import useIsWall from '../hooks/useIsWall';
+import useIsVisited from '../hooks/useIsVisited';
+import useIsPath from '../hooks/useIsPath';
 
 interface BoardProps {
   size: BoardSize;
@@ -23,6 +26,8 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   const { cellSize, startPosition, endPosition } = useSelector(selectBoard);
 
   const isWall = useIsWall();
+  const isVisited = useIsVisited();
+  const isPath = useIsPath();
 
   useResize({
     ref: tableRef,
@@ -39,6 +44,10 @@ const Board: React.FC<BoardProps> = ({ size }) => {
       return <Cell type={CellType.END} position={{ row, col }} />;
     } else if (isWall(row, col)) {
       return <Cell type={CellType.WALL} position={{ row, col }} />;
+    } else if (isVisited(row, col) && !isPath(row, col)) {
+      return <Cell type={CellType.VISITED} position={{ row, col }} />;
+    } else if (isPath(row, col)) {
+      return <Cell type={CellType.PATH} position={{ row, col }} />;
     }
     return <Cell type={CellType.EMPTY} position={{ row, col }} />;
   };
@@ -71,6 +80,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
       const isStart = e.target.classList.contains('board__cell--start');
 
+      dispatch(resetSolution());
       if (isStart) {
         dispatch(setStartPosition({ row, col }));
       } else {

@@ -22,6 +22,14 @@ function calculateClassNames(type: CellType): string {
       classNames += 'board__cell--end';
       break;
     }
+    case CellType.VISITED: {
+      classNames += 'board__cell--visited';
+      break;
+    }
+    case CellType.PATH: {
+      classNames += 'board__cell--shortest-path';
+      break;
+    }
   }
 
   return classNames;
