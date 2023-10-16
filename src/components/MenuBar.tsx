@@ -6,7 +6,7 @@ import ResetWallsOption from './MenuOptions/ResetWallsOption';
 import GenerateRandomMazeOption from './MenuOptions/GenerateRandomMazeOption';
 import GenerateRandomDFSMazeOption from './MenuOptions/GenerateRandomDFSMazeOption';
 import StyledMenu from './StyledMenu';
-import { canWallBePlaced } from '../utils';
+import { canWallBePlaced } from '../utils/validation';
 import useMazeIntervals from '../hooks/useMazeIntervals';
 import AnimationSwitch from './AnimationSwitch';
 import ResetSolutionOption from './MenuOptions/ResetSolutionOption';

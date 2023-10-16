@@ -14,12 +14,14 @@ export interface AlgorithmsState {
   type: Algorithm;
   speed: number;
   isAnimationOn: boolean;
+  solvingIntervals: number[];
 }
 
 const initialState: AlgorithmsState = {
   type: 'A_STAR' as Algorithm,
   speed: SPEED_TABLE[AnimationSpeed.MEDIUM],
   isAnimationOn: IS_ANIMATION_ON,
+  solvingIntervals: [],
 };
 
 export const algorithmsSlice = createSlice({
@@ -34,6 +36,9 @@ export const algorithmsSlice = createSlice({
     },
     setIsAnimationOn: (state, action: PayloadAction<boolean>) => {
       state.isAnimationOn = action.payload;
+    },
+    setSolvingIntervals: (state, action: PayloadAction<number[]>) => {
+      state.solvingIntervals = action.payload;
     },
   },
 });
@@ -61,7 +66,12 @@ export const selectIsAnimationOn = createSelector(
   (algorithms) => algorithms.isAnimationOn
 );
 
-export const { setAlgorithm, setSpeed, setIsAnimationOn } =
+export const selectSolvingIntervals = createSelector(
+  (state: RootState) => state.algorithms,
+  (algorithms) => algorithms.solvingIntervals
+);
+
+export const { setAlgorithm, setSpeed, setIsAnimationOn, setSolvingIntervals } =
   algorithmsSlice.actions;
 
 export default algorithmsSlice.reducer;

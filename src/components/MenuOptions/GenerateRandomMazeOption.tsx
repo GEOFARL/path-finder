@@ -14,6 +14,7 @@ import {
 
 import ExtensionIcon from '@mui/icons-material/Extension';
 import { Position } from '../../types';
+import useStopSolving from '../../hooks/useStopSolving';
 
 interface GenerateRandomMazeOptionProps {
   handleClose: () => void;
@@ -37,11 +38,14 @@ const GenerateRandomMazeOption: React.FC<GenerateRandomMazeOptionProps> = ({
   const animationSpeed = useSelector(selectAnimationSpeed);
   const isAnimationOn = useSelector(selectIsAnimationOn);
 
+  const stopSolving = useStopSolving();
+
   return (
     <MenuItem
       onClick={async () => {
         handleClose();
         cancelBuildingMaze();
+        stopSolving();
 
         dispatch(resetWalls());
         dispatch(resetSolution());

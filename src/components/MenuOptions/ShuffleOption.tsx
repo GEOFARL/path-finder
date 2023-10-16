@@ -2,6 +2,7 @@ import { MenuItem } from '@mui/material';
 import useShuffle from '../../hooks/useShuffle';
 
 import ShuffleIcon from '@mui/icons-material/Shuffle';
+import useStopSolving from '../../hooks/useStopSolving';
 
 interface ShuffleOptionProps {
   handleClose: () => void;
@@ -13,12 +14,14 @@ const ShuffleOption: React.FC<ShuffleOptionProps> = ({
   cancelBuildingMaze,
 }) => {
   const handleShuffle = useShuffle();
+  const stopSolving = useStopSolving();
 
   return (
     <MenuItem
       onClick={() => {
         handleClose();
         cancelBuildingMaze();
+        stopSolving();
         handleShuffle();
       }}
       disableRipple

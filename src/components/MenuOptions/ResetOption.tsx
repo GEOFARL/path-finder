@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { resetSolution, resetWalls } from '../../app/features/board/boardSlice';
 
 import CloseIcon from '@mui/icons-material/Close';
+import useStopSolving from '../../hooks/useStopSolving';
 
 interface ResetOptionProps {
   handleClose: () => void;
@@ -14,12 +15,14 @@ const ResetOption: React.FC<ResetOptionProps> = ({
   cancelBuildingMaze,
 }) => {
   const dispatch = useDispatch();
+  const stopSolving = useStopSolving();
 
   return (
     <MenuItem
       onClick={() => {
         handleClose();
         cancelBuildingMaze();
+        stopSolving();
 
         dispatch(resetWalls());
         dispatch(resetSolution());

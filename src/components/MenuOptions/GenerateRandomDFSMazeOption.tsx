@@ -14,6 +14,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { Position } from '../../types';
 import generateRandomDFSMaze from '../../utils/mazeGeneration/DFSMaze/generateRandomDFSMaze';
+import useStopSolving from '../../hooks/useStopSolving';
 
 interface GenerateRandomDFSMazeOptionProps {
   handleClose: () => void;
@@ -34,11 +35,15 @@ const GenerateRandomDFSMazeOption: React.FC<
   const animationSpeed = useSelector(selectAnimationSpeed);
   const isAnimationOn = useSelector(selectIsAnimationOn);
 
+  const stopSolving = useStopSolving();
+
   return (
     <MenuItem
       onClick={async () => {
         handleClose();
         cancelBuildingMaze();
+        stopSolving();
+
         dispatch(resetWalls());
         dispatch(resetSolution());
         const walls = generateRandomDFSMaze(board);

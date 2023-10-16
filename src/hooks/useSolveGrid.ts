@@ -5,9 +5,12 @@ import {
   addVisitedPosition,
   selectBoard,
 } from '../app/features/board/boardSlice';
-import { selectAlgorithm } from '../app/features/algorithms/algorithmsSlice';
+import {
+  selectAlgorithm,
+  setSolvingIntervals,
+} from '../app/features/algorithms/algorithmsSlice';
 import { useRef } from 'react';
-import { Algorithm } from '../types';
+import { Algorithm, SearcherResult } from '../types';
 
 export default function useSolveGrid() {
   const visitedCellsIntervalId = useRef<number | null>(null);
@@ -24,20 +27,20 @@ export default function useSolveGrid() {
   const solveGrid = () => {
     const pathSearcher = new PathSearcher(boardState);
 
-    let result;
+    let result: SearcherResult;
 
     switch (algorithmType) {
       case Algorithm.BFS: {
         result = pathSearcher.BFS();
         break;
       }
-      case Algorithm.A_STAR: {
+      case 'A_STAR' as Algorithm: {
         result = pathSearcher.aStar();
         break;
       }
     }
 
-    const { visitedCellsArray, path, error } = result;
+    const { visitedCellsArray, path, error } = result!;
 
     if (error) {
       throw new Error(error);
@@ -62,8 +65,10 @@ export default function useSolveGrid() {
               clearInterval(pathIntervalId.current!);
             }
           }, animationSpeed);
+          dispatch(setSolvingIntervals([pathIntervalId.current]));
         }
       }, animationSpeed);
+      dispatch(setSolvingIntervals([visitedCellsIntervalId.current]));
     } else {
       for (let i = 0; i < visitedCellsArray.length; i += 1) {
         dispatch(addVisitedPosition(visitedCellsArray[i]));
