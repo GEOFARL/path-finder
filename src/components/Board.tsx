@@ -1,6 +1,6 @@
 import React, { DragEvent, useRef } from 'react';
 import Cell from './Cell';
-import { BoardSize, CellType } from '../types';
+import { BoardSize } from '../types';
 import useResize from '../hooks/useResize';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,9 +11,8 @@ import {
   setStartPosition,
 } from '../app/features/board/boardSlice';
 import useTableListeners from '../hooks/useTableListeners';
+import useGetCellType from '../hooks/useGetCellType';
 import useIsWall from '../hooks/useIsWall';
-import useIsVisited from '../hooks/useIsVisited';
-import useIsPath from '../hooks/useIsPath';
 
 interface BoardProps {
   size: BoardSize;
@@ -25,10 +24,6 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   const dispatch = useDispatch();
   const { cellSize, startPosition, endPosition } = useSelector(selectBoard);
 
-  const isWall = useIsWall();
-  const isVisited = useIsVisited();
-  const isPath = useIsPath();
-
   useResize({
     ref: tableRef,
     changeCellSize: (val: number) => dispatch(setCellSize(val)),
@@ -37,20 +32,8 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
   useTableListeners(tableRef);
 
-  const getCell = (row: number, col: number) => {
-    if (row === startPosition.row && col === startPosition.col) {
-      return <Cell type={CellType.START} position={{ row, col }} />;
-    } else if (row === endPosition.row && col === endPosition.col) {
-      return <Cell type={CellType.END} position={{ row, col }} />;
-    } else if (isWall(row, col)) {
-      return <Cell type={CellType.WALL} position={{ row, col }} />;
-    } else if (isVisited(row, col) && !isPath(row, col)) {
-      return <Cell type={CellType.VISITED} position={{ row, col }} />;
-    } else if (isPath(row, col)) {
-      return <Cell type={CellType.PATH} position={{ row, col }} />;
-    }
-    return <Cell type={CellType.EMPTY} position={{ row, col }} />;
-  };
+  const isWall = useIsWall();
+  const getCellType = useGetCellType();
 
   const handleDragEnd = (e: DragEvent) => {
     e.preventDefault();
@@ -108,7 +91,10 @@ const Board: React.FC<BoardProps> = ({ size }) => {
                     key={col}
                     onDragEnd={handleDragEnd}
                   >
-                    {getCell(row, col)}
+                    <Cell
+                      type={getCellType(row, col)}
+                      position={{ row, col }}
+                    />
                   </td>
                 ))}
             </tr>

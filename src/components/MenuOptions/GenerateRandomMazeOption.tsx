@@ -2,6 +2,7 @@ import { MenuItem } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addWall,
+  resetSolution,
   resetWalls,
   selectBoard,
 } from '../../app/features/board/boardSlice';
@@ -43,6 +44,8 @@ const GenerateRandomMazeOption: React.FC<GenerateRandomMazeOptionProps> = ({
         cancelBuildingMaze();
 
         dispatch(resetWalls());
+        dispatch(resetSolution());
+
         const walls = generateRandomMaze(board);
         let i = 0;
 

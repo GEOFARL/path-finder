@@ -99,6 +99,13 @@ export const selectBoard = createSelector(
   (state: RootState) => state.board,
   (board) => board
 );
+export const selectStartEnd = createSelector(
+  (state: RootState) => state.board,
+  (board) => ({
+    startPosition: board.startPosition,
+    endPosition: board.endPosition,
+  })
+);
 export const selectWalls = createSelector(
   (state: RootState) => state.board,
   (board) => board.walls
