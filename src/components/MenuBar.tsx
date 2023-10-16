@@ -12,11 +12,14 @@ import ShuffleIcon from '@mui/icons-material/Shuffle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import useShuffle from '../hooks/useShuffle';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  generateRandomMaze,
+  addWall,
   resetWalls,
+  selectBoard,
 } from '../app/features/board/boardSlice';
+import generateRandomMaze from '../utils/mazeGeneration/generateRandomMaze';
+import generateRandomDFSMaze from '../utils/mazeGeneration/DFSMaze/generateRandomDFSMaze';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -72,6 +75,7 @@ const MenuBar: React.FC = () => {
   };
 
   const dispatch = useDispatch();
+  const boardState = useSelector(selectBoard);
 
   const handleShuffle = useShuffle();
 
@@ -122,12 +126,30 @@ const MenuBar: React.FC = () => {
         <MenuItem
           onClick={() => {
             handleClose();
-            dispatch(generateRandomMaze());
+            dispatch(resetWalls());
+            const walls = generateRandomMaze(boardState);
+            for (let i = 0; i < walls.length; i += 1) {
+              dispatch(addWall(walls[i]));
+            }
           }}
           disableRipple
         >
           <ShuffleIcon />
           Generate random maze
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            dispatch(resetWalls());
+            const walls = generateRandomDFSMaze(boardState);
+            for (let i = 0; i < walls.length; i += 1) {
+              dispatch(addWall(walls[i]));
+            }
+          }}
+          disableRipple
+        >
+          <ShuffleIcon />
+          Generate random DFS maze
         </MenuItem>
       </StyledMenu>
     </div>

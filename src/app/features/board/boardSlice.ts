@@ -8,7 +8,6 @@ import {
 } from '../../../constants';
 import { Position } from '../../../types';
 import { RootState } from '../../store';
-import { calculateValue } from '../../../utils';
 
 export interface BoardState {
   numOfRows: number;
@@ -64,30 +63,6 @@ export const boardSlice = createSlice({
     setIsMousePressed: (state, action: PayloadAction<boolean>) => {
       state.isMousePressed = action.payload;
     },
-    generateRandomMaze: (state) => {
-      const walls = [];
-      const { numOfRows, numOfCols, startPosition, endPosition } = state;
-      const rows = calculateValue(numOfRows);
-      const cols = calculateValue(numOfCols);
-
-      for (let i = 0; i < rows; i += 1) {
-        const columnCoordinates = new Set();
-
-        for (let j = 0; j < cols / 4; j += 1) {
-          columnCoordinates.add(Math.floor(5 * cols * Math.random()) % cols);
-        }
-
-        for (const colVal of columnCoordinates) {
-          if (
-            !(startPosition.col === colVal && startPosition.row === i) &&
-            !(endPosition.col === colVal && endPosition.row === i)
-          )
-            walls.push({ row: i, col: colVal as number });
-        }
-      }
-
-      state.walls = walls;
-    },
   },
 });
 
@@ -101,7 +76,6 @@ export const {
   removeWall,
   resetWalls,
   setIsMousePressed,
-  generateRandomMaze,
 } = boardSlice.actions;
 
 export const selectAlgorithm = createSelector(
