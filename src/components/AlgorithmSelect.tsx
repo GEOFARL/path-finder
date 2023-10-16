@@ -3,6 +3,7 @@ import { Algorithm } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAlgorithm } from '../app/features/algorithms/algorithmsSlice';
 import { selectAlgorithm } from '../app/features/algorithms/algorithmsSlice';
+import { resetSolution } from '../app/features/board/boardSlice';
 
 const AlgorithmSelect: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,10 @@ const AlgorithmSelect: React.FC = () => {
         labelId="select-searching-algorithm"
         value={type}
         label="Searching Algorithm"
-        onChange={(e) => dispatch(setAlgorithm(e.target.value as Algorithm))}
+        onChange={(e) => {
+          dispatch(setAlgorithm(e.target.value as Algorithm));
+          dispatch(resetSolution());
+        }}
       >
         {Object.entries(Algorithm).map((value) => (
           <MenuItem value={value[0]} key={value[0]}>

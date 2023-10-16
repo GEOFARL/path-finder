@@ -10,15 +10,18 @@ import {
   setNumberOfRows,
 } from '../app/features/board/boardSlice';
 import useShuffle from '../hooks/useShuffle';
+import useStopSolving from '../hooks/useStopSolving';
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
   const { numOfCols, numOfRows } = useSelector(selectBoard);
   const handleShuffle = useShuffle();
+  const stopSolving = useStopSolving();
 
   const handleChangeRows = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(resetSolution());
+      stopSolving();
       dispatch(setNumberOfRows(newValue));
       handleShuffle({ rows: newValue });
     }
@@ -26,6 +29,7 @@ const Main: React.FC = () => {
   const handleChangeCols = (_: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       dispatch(resetSolution());
+      stopSolving();
       dispatch(setNumberOfCols(newValue));
       handleShuffle({ cols: newValue });
     }
