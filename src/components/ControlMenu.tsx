@@ -38,9 +38,8 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
   return (
     <Box
       mt={{
-        xs: '1rem',
-        md: '1.5rem',
-        lg: '2rem',
+        xs: '5rem',
+        sm: '6rem',
       }}
     >
       <Grid container spacing={2} alignItems="center">
