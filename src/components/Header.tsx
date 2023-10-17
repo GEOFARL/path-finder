@@ -38,9 +38,11 @@ const Header: React.FC = () => {
       <List>
         {navItems.map((item) => (
           <ListItem key={item.title} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.title} />
-            </ListItemButton>
+            <NavLink to={item.to} style={{ width: '100%' }}>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                <ListItemText primary={item.title} />
+              </ListItemButton>
+            </NavLink>
           </ListItem>
         ))}
       </List>
@@ -72,9 +74,9 @@ const Header: React.FC = () => {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item.title} sx={{ color: '#fff' }}>
-                <NavLink to={item.to}>{item.title}</NavLink>
-              </Button>
+              <NavLink to={item.to} key={item.title}>
+                <Button sx={{ color: '#fff' }}>{item.title}</Button>
+              </NavLink>
             ))}
           </Box>
         </Toolbar>

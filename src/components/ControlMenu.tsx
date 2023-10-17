@@ -26,6 +26,7 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
     open: false,
     error: null,
   });
+  const [isSolving, setIsSolving] = useState<boolean>(false);
 
   const handleClose = () => {
     setError({
@@ -55,8 +56,11 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
             variant="contained"
             onClick={() => {
               try {
+                setIsSolving(true);
                 solveGrid();
+                setIsSolving(false);
               } catch (error) {
+                setIsSolving(false);
                 if (!(error instanceof Error)) return;
                 setError({
                   open: true,
@@ -64,6 +68,7 @@ const ControlMenu: React.FC<ControlMenuProps> = ({
                 });
               }
             }}
+            disabled={isSolving}
           >
             Solve
           </Button>

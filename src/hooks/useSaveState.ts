@@ -1,17 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { AlgorithmCharacteristics } from '../types/pathSearcher';
 import { selectBoard } from '../app/features/board/boardSlice';
-import { Algorithm, Position } from '../types';
+import { Algorithm, SavedState } from '../types';
 import { selectAlgorithm } from '../app/features/algorithms/algorithmsSlice';
-
-interface SavedState {
-  rows: number;
-  cols: number;
-  start: Position;
-  end: Position;
-  walls: Position[];
-  stats: AlgorithmCharacteristics;
-}
 
 export default function useSaveState() {
   const { numOfRows, numOfCols, startPosition, endPosition, walls } =
@@ -38,6 +30,7 @@ export default function useSaveState() {
     }
 
     const newState: SavedState = {
+      id: uuidv4(),
       rows: numOfRows,
       cols: numOfCols,
       start: startPosition,

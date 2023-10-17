@@ -8,7 +8,7 @@ export default function useIsVisited() {
   return useCallback(
     (row: number, col: number) =>
       visitedPositions.some(
-        (position) => position.row === row && position.col === col
+        (position) => position && position.row === row && position.col === col
       ),
     [visitedPositions]
   );

@@ -16,7 +16,7 @@ export interface AlgorithmsState {
   speed: number;
   isAnimationOn: boolean;
   solvingIntervals: number[];
-  lastSolvedStats: AlgorithmCharacteristics | null;
+  lastSolvedStats: (AlgorithmCharacteristics & { timeTaken: number }) | null;
 }
 
 const initialState: AlgorithmsState = {

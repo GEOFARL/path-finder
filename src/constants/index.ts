@@ -9,3 +9,5 @@ export const [DEFAULT_START_POSITION, DEFAULT_END_POSITION] = shufflePositions(
 );
 
 export const IS_ANIMATION_ON = true;
+
+export const LOCAL_STORAGE_KEYS = ['savedStatesAStar', 'savedStatesBFS'];
