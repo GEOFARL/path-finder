@@ -1,6 +1,7 @@
 import { calculateValue } from '.';
 import { RootState } from '../app/store';
 import { IPathSearcher, Position, SearcherResult } from '../types';
+import { AlgorithmCharacteristics } from '../types/pathSearcher';
 
 type InitBoard = 'BFS' | 'A_STAR';
 
@@ -35,18 +36,30 @@ export default class PathSearcher implements IPathSearcher {
   public BFS(): SearcherResult {
     this.initBoardGrid('BFS');
 
+    const characteristics: AlgorithmCharacteristics = {
+      iterationCount: 0,
+      maxStatesInMemory: 0,
+      totalGeneratedStates: 0,
+    };
+
     const visitedCellsArray: Position[] = [];
     let path: Position[] = [];
 
     const queue: Position[] = [];
+
     queue.push({ row: this.startNode.row, col: this.startNode.col });
+    characteristics.totalGeneratedStates += 1;
+
     this.grid[this.startNode.row][this.startNode.col].visited = 1;
     visitedCellsArray.push(this.startNode);
+    characteristics.maxStatesInMemory += 1;
 
     while (queue.length > 0) {
       const current = queue.shift()!;
 
       for (let i = 0; i < 4; i += 1) {
+        characteristics.iterationCount += 1;
+
         const col = current.col + PathSearcher.dx[i];
         const row = current.row + PathSearcher.dy[i];
 
@@ -59,6 +72,7 @@ export default class PathSearcher implements IPathSearcher {
             visitedCellsArray,
             path,
             error: null,
+            characteristics,
           };
         } else if (
           col >= 0 &&
@@ -74,6 +88,11 @@ export default class PathSearcher implements IPathSearcher {
           this.grid[row][col].previousCol = current.col;
           this.grid[row][col].previousRow = current.row;
           queue.push({ row, col });
+          characteristics.maxStatesInMemory = Math.max(
+            queue.length,
+            characteristics.maxStatesInMemory
+          );
+          characteristics.totalGeneratedStates += 1;
         }
       }
     }
@@ -82,11 +101,18 @@ export default class PathSearcher implements IPathSearcher {
       visitedCellsArray,
       path,
       error: 'Path is not found',
+      characteristics,
     };
   }
 
   public aStar(): SearcherResult {
     type AStarPosition = Position & { f: number };
+
+    const characteristics: AlgorithmCharacteristics = {
+      iterationCount: 0,
+      maxStatesInMemory: 0,
+      totalGeneratedStates: 0,
+    };
 
     this.initBoardGrid('A_STAR');
 
@@ -96,6 +122,7 @@ export default class PathSearcher implements IPathSearcher {
 
     const h = this.H(this.startNode, this.endNode);
     openList.push({ f: h, row: this.startNode.row, col: this.startNode.col });
+    characteristics.maxStatesInMemory += 1;
 
     (this.grid as AStarNode[][])[this.startNode.row][
       this.startNode.col
@@ -103,8 +130,10 @@ export default class PathSearcher implements IPathSearcher {
 
     while (openList.length > 0) {
       let minValueIndex = 0;
+      characteristics.iterationCount += 1;
 
       for (let i = 0; i < openList.length; i += 1) {
+        characteristics.iterationCount += 1;
         if (openList[i].f < openList[minValueIndex].f) {
           minValueIndex = i;
         }
@@ -141,12 +170,15 @@ export default class PathSearcher implements IPathSearcher {
           path,
           visitedCellsArray: closeList,
           error: '',
+          characteristics,
         };
       }
 
       for (let i = 0; i < 4; i += 1) {
         const col = currentNode.col + PathSearcher.dx[i];
         const row = currentNode.row + PathSearcher.dy[i];
+
+        characteristics.iterationCount += 1;
 
         if (
           !(
@@ -171,6 +203,8 @@ export default class PathSearcher implements IPathSearcher {
           this.grid[row][col].previousRow = currentNode.row;
           this.grid[row][col].previousCol = currentNode.col;
 
+          characteristics.totalGeneratedStates += 1;
+
           if (
             !openList.find(
               (aStarNode) =>
@@ -184,12 +218,22 @@ export default class PathSearcher implements IPathSearcher {
               row,
               col,
             });
+
+            characteristics.maxStatesInMemory = Math.max(
+              characteristics.maxStatesInMemory,
+              openList.length + closeList.length
+            );
           }
         }
       }
     }
 
-    return { path, visitedCellsArray: closeList, error: 'Path is not found' };
+    return {
+      path,
+      visitedCellsArray: closeList,
+      error: 'Path is not found',
+      characteristics,
+    };
   }
 
   private H(source: Position, dest: Position): number {

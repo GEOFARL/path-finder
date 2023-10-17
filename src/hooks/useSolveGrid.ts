@@ -7,6 +7,7 @@ import {
 } from '../app/features/board/boardSlice';
 import {
   selectAlgorithm,
+  setLastSolvedStats,
   setSolvingIntervals,
 } from '../app/features/algorithms/algorithmsSlice';
 import { useRef } from 'react';
@@ -39,6 +40,7 @@ export default function useSolveGrid() {
         break;
       }
     }
+    dispatch(setLastSolvedStats(result!.characteristics!));
 
     const { visitedCellsArray, path, error } = result!;
 

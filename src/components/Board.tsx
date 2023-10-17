@@ -13,6 +13,9 @@ import {
 import useTableListeners from '../hooks/useTableListeners';
 import useGetCellType from '../hooks/useGetCellType';
 import useIsWall from '../hooks/useIsWall';
+import SolutionStats from './SolutionStats';
+import { Box } from '@mui/material';
+import useLastSolvedStats from '../hooks/useLastSolvedStats';
 
 interface BoardProps {
   size: BoardSize;
@@ -34,6 +37,8 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
   const isWall = useIsWall();
   const getCellType = useGetCellType();
+
+  const lastSolvedStats = useLastSolvedStats();
 
   const handleDragEnd = (e: DragEvent) => {
     e.preventDefault();
@@ -70,34 +75,37 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   };
 
   return (
-    <table className="board" ref={tableRef}>
-      <tbody>
-        {Array(size.rows)
-          .fill(0)
-          .map((_, row) => (
-            <tr key={row}>
-              {Array(size.cols)
-                .fill(0)
-                .map((_, col) => (
-                  <td
-                    className="board__cell-container"
-                    style={{
-                      width: `${cellSize}px`,
-                      height: `${cellSize}px`,
-                    }}
-                    key={col}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <Cell
-                      type={getCellType(row, col)}
-                      position={{ row, col }}
-                    />
-                  </td>
-                ))}
-            </tr>
-          ))}
-      </tbody>
-    </table>
+    <Box mt={{ xs: '2rem', md: '4rem' }} className="board-container">
+      {lastSolvedStats && <SolutionStats mb={'1rem'} {...lastSolvedStats} />}
+      <table className="board board-container" ref={tableRef}>
+        <tbody>
+          {Array(size.rows)
+            .fill(0)
+            .map((_, row) => (
+              <tr key={row}>
+                {Array(size.cols)
+                  .fill(0)
+                  .map((_, col) => (
+                    <td
+                      className="board__cell-container"
+                      style={{
+                        width: `${cellSize}px`,
+                        height: `${cellSize}px`,
+                      }}
+                      key={col}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <Cell
+                        type={getCellType(row, col)}
+                        position={{ row, col }}
+                      />
+                    </td>
+                  ))}
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </Box>
   );
 };
 export default Board;

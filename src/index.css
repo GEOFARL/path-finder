@@ -7,12 +7,13 @@
 }
 
 .board {
+  border-collapse: collapse;
+}
+
+.board-container {
+  margin: 0 auto;
   max-width: 1100px;
   width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-
-  margin-top: 4rem;
 }
 
 .board__cell-container {

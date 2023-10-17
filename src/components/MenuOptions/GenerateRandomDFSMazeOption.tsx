@@ -65,7 +65,9 @@ const GenerateRandomDFSMazeOption: React.FC<
           );
         } else {
           for (let i = 0; i < walls.length; i += 1) {
-            dispatch(addWall(walls[i]));
+            if (isValid(startPosition, endPosition, walls[i])) {
+              dispatch(addWall(walls[i]));
+            }
           }
         }
       }}
