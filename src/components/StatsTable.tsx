@@ -82,9 +82,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ type }) => {
   const [isShowingState, setIsShowingState] = useState<boolean>(false);
   const setForceUpdate = useState<boolean>(false)[1];
 
-  const rows = useMemo(() => {
-    return getRows(type);
-  }, [type]);
+  const rows = getRows(type);
 
   const savedStates = useMemo(() => {
     return getSavedStates(type);

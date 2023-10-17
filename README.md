@@ -1,27 +1,36 @@
-# React + TypeScript + Vite
+# Path Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### [Live Demo](https://652ef6fa14553502e92470a2--idyllic-haupia-98e180.netlify.app/)
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A Program that visualizes the path finding process and uses the following search algorithms:
 
-## Expanding the ESLint configuration
+- Noninformative: BFS
+- Informative: A\*
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Main features
 
-- Configure the top-level `parserOptions` property like this:
+- Maze generation and building
+- Awesome animations that demonstrate how algorithm works
+- Stats about each searching trial
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## Preview
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+![main-view](./src/assets/main-view.png)
+
+![stats](./src/assets/stats.png)
+
+## Run locally
+
+- clone this repo
+- `npm install`
+- `npm run dev`
+- open `localhost:3000`
+
+## Technologies used
+
+- React
+- Redux
+- React-Router
+- Material UI
