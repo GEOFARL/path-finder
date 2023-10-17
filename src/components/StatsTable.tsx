@@ -1,35 +1,10 @@
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import { Algorithm, SavedState } from '../types';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Box, Button } from '@mui/material';
-import { LOCAL_STORAGE_KEYS } from '../constants';
-
-const handleDelete = (id: string) => {
-  for (const key of LOCAL_STORAGE_KEYS) {
-    const savedStates = localStorage.getItem(key);
-
-    if (savedStates) {
-      const parsedStates = JSON.parse(savedStates);
-      const updatedState = parsedStates.filter(
-        (state: SavedState) => state.id !== id
-      );
-      localStorage.setItem(key, JSON.stringify(updatedState));
-    }
-  }
-};
-
-const handleDeleteAll = (type: Algorithm) => {
-  switch (type) {
-    case 'A_STAR' as Algorithm: {
-      localStorage.removeItem('savedStatesAStar');
-      break;
-    }
-    case Algorithm.BFS: {
-      localStorage.removeItem('savedStatesBFS');
-      break;
-    }
-  }
-};
+import { handleDelete, handleDeleteAll } from '../utils/localStorage';
+import StateBoard from './StateBoard';
+import { calculateValue } from '../utils';
 
 const columns: GridColDef[] = [
   { field: 'size', headerName: 'Size (rows x cols)', width: 140 },
@@ -60,8 +35,7 @@ interface IRow {
   timeTaken: string;
 }
 
-function getRows(type: Algorithm) {
-  const rows: IRow[] = [];
+function getSavedStates(type: Algorithm) {
   let savedStates: string | null;
 
   switch (type) {
@@ -80,11 +54,18 @@ function getRows(type: Algorithm) {
     parsedSavedStates = JSON.parse(savedStates);
   }
 
+  return parsedSavedStates;
+}
+
+function getRows(type: Algorithm) {
+  const rows: IRow[] = [];
+  const parsedSavedStates = getSavedStates(type);
+
   parsedSavedStates.forEach((state) => {
     rows.push({
       ...state.stats,
       id: state.id,
-      size: `${state.rows}x${state.cols}`,
+      size: `${calculateValue(state.rows)}x${calculateValue(state.cols)}`,
       timeTaken: `${state.stats.timeTaken}ms`,
     });
   });
@@ -98,10 +79,22 @@ interface StatsTableProps {
 
 const StatsTable: React.FC<StatsTableProps> = ({ type }) => {
   const [selectedRow, setSelectedRow] = useState<string>('');
+  const [isShowingState, setIsShowingState] = useState<boolean>(false);
   const setForceUpdate = useState<boolean>(false)[1];
-  const rows = getRows(type);
 
-  return (
+  const rows = useMemo(() => {
+    return getRows(type);
+  }, [type]);
+
+  const savedStates = useMemo(() => {
+    return getSavedStates(type);
+  }, [type]);
+
+  const selectedState: SavedState = useMemo<SavedState>(() => {
+    return savedStates.find((state) => state.id === selectedRow)!;
+  }, [savedStates, selectedRow]);
+
+  return !isShowingState ? (
     <div style={{ maxHeight: '900px', width: '100%' }}>
       <DataGrid
         rows={rows}
@@ -124,11 +117,18 @@ const StatsTable: React.FC<StatsTableProps> = ({ type }) => {
         gap={'1rem'}
         justifyContent={'flex-end'}
         mt={'1rem'}
+        flexDirection={{
+          xs: 'column',
+          sm: 'row',
+        }}
       >
         <Button
           variant="contained"
           color="primary"
           disabled={selectedRow.length === 0}
+          onClick={() => {
+            setIsShowingState((p) => !p);
+          }}
         >
           Show State
         </Button>
@@ -156,6 +156,29 @@ const StatsTable: React.FC<StatsTableProps> = ({ type }) => {
         </Button>
       </Box>
     </div>
+  ) : (
+    <Box display={'flex'} flexDirection={'column'}>
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        sx={{
+          alignSelf: 'flex-end',
+          width: '100px',
+          mb: '1rem',
+        }}
+        onClick={() => setIsShowingState((p) => !p)}
+      >
+        Back
+      </Button>
+      <StateBoard
+        cols={calculateValue(selectedState.cols)}
+        rows={calculateValue(selectedState.rows)}
+        start={selectedState.start}
+        end={selectedState.end}
+        walls={selectedState.walls}
+      />
+    </Box>
   );
 };
 
