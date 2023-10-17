@@ -1,7 +1,3 @@
-import Board from './Board';
-import ControlMenu from './ControlMenu';
-import { BoardSize } from '../types';
-import { calculateValue } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   resetSolution,
@@ -11,8 +7,12 @@ import {
 } from '../app/features/board/boardSlice';
 import useShuffle from '../hooks/useShuffle';
 import useStopSolving from '../hooks/useStopSolving';
+import ControlMenu from '../components/ControlMenu';
+import { calculateValue } from '../utils';
+import Board from '../components/Board';
+import { BoardSize } from '../types';
 
-const Main: React.FC = () => {
+const VisualizerPage: React.FC = () => {
   const dispatch = useDispatch();
   const { numOfCols, numOfRows } = useSelector(selectBoard);
   const handleShuffle = useShuffle();
@@ -56,4 +56,4 @@ const Main: React.FC = () => {
   );
 };
 
-export default Main;
+export default VisualizerPage;

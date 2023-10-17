@@ -103,3 +103,9 @@
     border: none;
   }
 }
+
+a {
+  appearance: none;
+  text-decoration: none;
+  color: inherit;
+}

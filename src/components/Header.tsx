@@ -14,9 +14,13 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
-const navItems = ['Visualizer', 'Stats'];
+const navItems = [
+  { title: 'Visualizer', to: '/' },
+  { title: 'Stats', to: 'stats' },
+];
 
 const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -33,9 +37,9 @@ const Header: React.FC = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.title} disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -68,8 +72,8 @@ const Header: React.FC = () => {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button key={item.title} sx={{ color: '#fff' }}>
+                <NavLink to={item.to}>{item.title}</NavLink>
               </Button>
             ))}
           </Box>

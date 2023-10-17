@@ -1,44 +1,31 @@
-import {
-  Box,
-  Container,
-  ThemeProvider,
-  createTheme,
-  responsiveFontSizes,
-} from '@mui/material';
-import Header from './components/Header';
-import Main from './components/Main';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-
-let theme = createTheme({});
-theme = responsiveFontSizes(theme);
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import RootLayout from './layouts/RootLayout';
+import VisualizerPage from './pages/VisualizerPage';
+import StatsPage from './pages/StatsPage';
+import ErrorPage from './pages/ErrorPage';
 
 document.addEventListener('dragover', (e) => e.preventDefault());
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <VisualizerPage />,
+      },
+      {
+        path: 'stats',
+        element: <StatsPage />,
+      },
+    ],
+  },
+]);
+
 function App() {
-  return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <Box
-          minHeight="100vh"
-          bgcolor="#f8fafc"
-          p={{
-            xs: '0.5rem',
-            sm: '0',
-          }}
-          pb={{
-            xs: '2rem',
-            sm: '2rem',
-          }}
-        >
-          <Container>
-            <Header />
-            <Main />
-          </Container>
-        </Box>
-      </ThemeProvider>
-    </Provider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
