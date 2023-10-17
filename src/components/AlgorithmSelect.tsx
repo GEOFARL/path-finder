@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAlgorithm } from '../app/features/algorithms/algorithmsSlice';
 import { selectAlgorithm } from '../app/features/algorithms/algorithmsSlice';
 import { resetSolution } from '../app/features/board/boardSlice';
+import useStopSolving from '../hooks/useStopSolving';
 
 const AlgorithmSelect: React.FC = () => {
   const dispatch = useDispatch();
   const { type } = useSelector(selectAlgorithm);
+  const stopSolving = useStopSolving();
 
   return (
     <FormControl fullWidth size="small">
@@ -21,6 +23,7 @@ const AlgorithmSelect: React.FC = () => {
         onChange={(e) => {
           dispatch(setAlgorithm(e.target.value as Algorithm));
           dispatch(resetSolution());
+          stopSolving();
         }}
       >
         {Object.entries(Algorithm).map((value) => (

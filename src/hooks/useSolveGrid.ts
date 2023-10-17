@@ -12,6 +12,7 @@ import {
 } from '../app/features/algorithms/algorithmsSlice';
 import { useRef } from 'react';
 import { Algorithm, SearcherResult } from '../types';
+import useSaveState from './useSaveState';
 
 export default function useSolveGrid() {
   const visitedCellsIntervalId = useRef<number | null>(null);
@@ -24,6 +25,8 @@ export default function useSolveGrid() {
     speed: animationSpeed,
     type: algorithmType,
   } = useSelector(selectAlgorithm);
+
+  const saveState = useSaveState();
 
   const solveGrid = () => {
     const pathSearcher = new PathSearcher(boardState);
@@ -48,6 +51,7 @@ export default function useSolveGrid() {
       throw new Error(error);
     }
 
+    saveState(result!.characteristics!);
     path.reverse();
 
     let i = 0;
