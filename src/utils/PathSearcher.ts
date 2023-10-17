@@ -2,6 +2,7 @@ import { calculateValue } from '.';
 import { RootState } from '../app/store';
 import { IPathSearcher, Position, SearcherResult } from '../types';
 import { AlgorithmCharacteristics } from '../types/pathSearcher';
+import MinHeap from './MinHeap';
 
 type InitBoard = 'BFS' | 'A_STAR';
 
@@ -21,6 +22,37 @@ class AStarNode extends Node {
   }
 }
 
+interface IAStarPosition extends Position {
+  f: number;
+  compare: (another: AStarPosition) => 1 | 0 | -1;
+  equals(another: AStarPosition): boolean;
+}
+
+class AStarPosition implements IAStarPosition {
+  constructor(public f: number, public row: number, public col: number) {}
+
+  compare(another: AStarPosition): 1 | 0 | -1 {
+    if (this.f > another.f) return 1;
+    else if (this.f < another.f) return -1;
+    return 0;
+  }
+
+  equals(another: AStarPosition): boolean {
+    return (
+      this.f === another.f &&
+      this.col === another.col &&
+      this.row === another.row
+    );
+  }
+
+  getPosition(): Position {
+    return {
+      col: this.col,
+      row: this.row,
+    };
+  }
+}
+
 export default class PathSearcher implements IPathSearcher {
   private grid: (Node | AStarNode)[][] = [];
   private startNode: Position;
@@ -34,13 +66,14 @@ export default class PathSearcher implements IPathSearcher {
   static dy = [1, 0, -1, 0];
 
   public BFS(): SearcherResult {
-    this.initBoardGrid('BFS');
-
     const characteristics: AlgorithmCharacteristics = {
       iterationCount: 0,
       maxStatesInMemory: 0,
       totalGeneratedStates: 0,
+      timeTaken: 0,
     };
+    const start = Date.now();
+    this.initBoardGrid('BFS');
 
     const visitedCellsArray: Position[] = [];
     let path: Position[] = [];
@@ -68,6 +101,8 @@ export default class PathSearcher implements IPathSearcher {
 
           path = this.constructPath(row, col, current);
 
+          const end = Date.now();
+          characteristics.timeTaken = end - start;
           return {
             visitedCellsArray,
             path,
@@ -97,6 +132,8 @@ export default class PathSearcher implements IPathSearcher {
       }
     }
 
+    const end = Date.now();
+    characteristics.timeTaken = end - start;
     return {
       visitedCellsArray,
       path,
@@ -106,43 +143,38 @@ export default class PathSearcher implements IPathSearcher {
   }
 
   public aStar(): SearcherResult {
-    type AStarPosition = Position & { f: number };
-
     const characteristics: AlgorithmCharacteristics = {
       iterationCount: 0,
       maxStatesInMemory: 0,
       totalGeneratedStates: 0,
+      timeTaken: 0,
     };
+
+    const start = Date.now();
 
     this.initBoardGrid('A_STAR');
 
-    const closeList: AStarPosition[] = [];
-    let openList: AStarPosition[] = [];
+    const closeList: Position[] = [];
+    const openList = new MinHeap<AStarPosition>();
     const path: Position[] = [];
 
     const h = this.H(this.startNode, this.endNode);
-    openList.push({ f: h, row: this.startNode.row, col: this.startNode.col });
+    characteristics.iterationCount += openList.insert(
+      new AStarPosition(h, this.startNode.row, this.startNode.col)
+    );
     characteristics.maxStatesInMemory += 1;
 
     (this.grid as AStarNode[][])[this.startNode.row][
       this.startNode.col
     ].gScore = 0;
 
-    while (openList.length > 0) {
-      let minValueIndex = 0;
+    while (!openList.isEmpty()) {
       characteristics.iterationCount += 1;
 
-      for (let i = 0; i < openList.length; i += 1) {
-        characteristics.iterationCount += 1;
-        if (openList[i].f < openList[minValueIndex].f) {
-          minValueIndex = i;
-        }
-      }
+      const currentNode = openList.getMin();
+      closeList.push(currentNode.getPosition());
 
-      const currentNode = openList[minValueIndex];
-      closeList.push(currentNode);
-
-      openList = openList.filter((_, i) => i !== minValueIndex);
+      characteristics.iterationCount += openList.remove();
 
       if (
         currentNode.row === this.endNode.row &&
@@ -166,6 +198,10 @@ export default class PathSearcher implements IPathSearcher {
           temp.row = tmpRow;
           path.push({ row: temp.row, col: temp.col });
         }
+
+        const end = Date.now();
+        characteristics.timeTaken = end - start;
+
         return {
           path,
           visitedCellsArray: closeList,
@@ -198,26 +234,20 @@ export default class PathSearcher implements IPathSearcher {
         const newHScore = this.H({ row, col }, this.endNode);
         const newFScore = newGScore + newHScore;
 
+        characteristics.totalGeneratedStates += 1;
+
         if ((this.grid as AStarNode[][])[row][col].gScore > newGScore) {
           (this.grid as AStarNode[][])[row][col].gScore = newGScore;
+
           this.grid[row][col].previousRow = currentNode.row;
           this.grid[row][col].previousCol = currentNode.col;
 
-          characteristics.totalGeneratedStates += 1;
+          const newPos = new AStarPosition(newFScore, row, col);
+          const [contains, iterationCount] = openList.contains(newPos);
+          characteristics.iterationCount += iterationCount;
 
-          if (
-            !openList.find(
-              (aStarNode) =>
-                aStarNode.f === newFScore &&
-                aStarNode.col === col &&
-                aStarNode.row === row
-            )
-          ) {
-            openList.push({
-              f: newFScore,
-              row,
-              col,
-            });
+          if (!contains) {
+            characteristics.iterationCount += openList.insert(newPos);
 
             characteristics.maxStatesInMemory = Math.max(
               characteristics.maxStatesInMemory,
@@ -228,6 +258,8 @@ export default class PathSearcher implements IPathSearcher {
       }
     }
 
+    const end = Date.now();
+    characteristics.timeTaken = end - start;
     return {
       path,
       visitedCellsArray: closeList,
@@ -288,21 +320,20 @@ export default class PathSearcher implements IPathSearcher {
 
       for (let j = 0; j < this.cols; j += 1) {
         if (type === 'BFS') {
-          arr.push(
-            new Node(
-              !!walls.find((wallPos) => wallPos.row === i && wallPos.col === j)
-            )
-          );
+          arr.push(new Node(this.isWall(walls, i, j)));
         } else if (type === 'A_STAR') {
-          arr.push(
-            new AStarNode(
-              !!walls.find((wallPos) => wallPos.row === i && wallPos.col === j)
-            )
-          );
+          arr.push(new AStarNode(this.isWall(walls, i, j)));
         }
       }
-
       this.grid[i] = arr;
     }
+  }
+
+  private isWall(walls: Position[], row: number, col: number) {
+    return (
+      !!walls.find((wallPos) => wallPos.row === row && wallPos.col === col) &&
+      !(this.startNode.row === row && this.startNode.col === col) &&
+      !(this.endNode.row === row && this.endNode.col === col)
+    );
   }
 }

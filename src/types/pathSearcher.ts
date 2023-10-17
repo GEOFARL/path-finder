@@ -10,6 +10,7 @@ export interface SearcherResult {
 export interface AlgorithmCharacteristics {
   iterationCount: number;
   deadEndsCount?: number;
+  timeTaken: number;
   maxStatesInMemory: number;
   totalGeneratedStates: number;
 }

@@ -10,6 +10,7 @@ const SolutionStats: React.FC<SolutionStatsProps> = ({
   iterationCount,
   maxStatesInMemory,
   totalGeneratedStates,
+  timeTaken,
   ...props
 }) => {
   return (
@@ -29,6 +30,7 @@ const SolutionStats: React.FC<SolutionStatsProps> = ({
         label={`Total generated states: ${totalGeneratedStates}`}
         color="primary"
       />
+      <Chip label={`Time: ${timeTaken}ms`} color="primary" />
     </Box>
   );
 };
